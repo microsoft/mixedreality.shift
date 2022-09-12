@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Company>Microsoft Corporation</Company>
+		<Authors>MixedReality ApES-Inner</Authors>
+		<Copyright>Copyright © Microsoft Corporation</Copyright>
+		<RepositoryUrl>https://microsoft.visualstudio.com//Analog/_git/mixedreality.devtools</RepositoryUrl>
+		<PackageTags>MixedReality;ApES</PackageTags>
+		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+		<RootNamespace>Shift.Core</RootNamespace>
+		<LangVersion>9.0</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Azure.Identity" Version="1.6.0" />
+		<PackageReference Include="DeepCloner" Version="0.10.4" />
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.*" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.VisualStudio.Services.Packaging.Client" Version="16.193.0-preview" />
+		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
+		<PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.193.0-preview" />
+	</ItemGroup>
+
+</Project>
