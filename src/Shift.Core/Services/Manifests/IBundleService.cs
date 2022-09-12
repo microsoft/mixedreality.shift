@@ -36,6 +36,13 @@ namespace Shift.Core.Services.Manifests
         Task<ShiftResultCode> DownloadBundleAsync(Manifest manifest, string bundle);
 
         /// <summary>
+        /// Downloads the components in the specified bundle
+        /// </summary>
+        /// <param name="manifestPath">Path to manifest file</param>
+        /// <param name="bundle">Bundle name</param>
+        Task<ShiftResultCode> DownloadBundleAsync(string manifestPath, string bundle);
+
+        /// <summary>
         /// Downloads the components in the default bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>

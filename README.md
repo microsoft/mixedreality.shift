@@ -131,15 +131,11 @@ You can also specify the network directory location to copy the file. This is no
 
 ## Shift CLI commands
 ___
-`shift.exe init [--flavor flavor] [--version version]`
-
-Downloads and installs the specified flavor and version of the manifest.
-___
-`shift.exe init-local --path [path to the local manifest file]`
+`shift.exe init --path [path to the local manifest file]`
 
 Downloads and installs the specified local manifest.
 ___
-`shift.exe install <components> -v [versions]`
+`shift.exe install [path to the local manifest file] -c [components] -v [versions] -b [bundle]`
 
 Install a specific component
 This command lets you download and install a specific component. You may input a single component by its id, or a comma-separated list of components. If you do not input a version number, the version number from the lkg (latest-stable) build will be grabbed. If you want to install multiple components but want to specify a single version number, version input should also be a comma-separated list of versions. Notice the commas in the below example:
@@ -151,7 +147,7 @@ shift.exe install c1,c2 -v 0.0.1, | 0.0.1 | latest stable |
 shift.exe install c1,c2 -v ,0.0.1 | latest stable | 0.0.1 |
 shift.exe install c1,c2 -v 0.0.1,0.0.1 | 0.0.1 | 0.0.1 |
 ___
-`shift.exe download <components> -v [versions]`
+`shift.exe download [path to the local manifest file] -c [components] -v [versions] -b [bundle]`
 
 This command lets you download a specific component. You may input a single component by its id, or a comma-separated list of components. If you do not input a version number, the version number from the lkg (latest-stable) build will be grabbed. If you want to download multiple components but want to specify a version number for a specific component, version input should also be a comma-separated list of versions. Notice the commas in the below example:
 
@@ -161,23 +157,6 @@ shift.exe install c1,c2 | latest stable | latest stable |
 shift.exe install c1,c2 -v 0.0.1, | 0.0.1 | latest stable |
 shift.exe install c1,c2 -v ,0.0.1 | latest stable | 0.0.1 |
 shift.exe install c1,c2 -v 0.0.1,0.0.1 | 0.0.1 | 0.0.1 |
-___
-`shift.exe create-release`
-
-This command downloads the latest version of the product manifest file, the component artifacts, and any other necessary tools needed to flash the complete image.
-___
-`shift.exe init-release`
-
-This command is identical to "init" except it doesn't download the components but simply installs the components in the release image. 
-
-How to run:
-
-- cd to the {release image path}\mrshift
-- run the command
-___
-`shift.exe promote-component`, `shift.exe promote-manifest`
-
-These commands are used in the composition repo pipeline to manage the component versions. You shouldn't really have to use these commands yourself.
 ___
 
 ## Contributing
