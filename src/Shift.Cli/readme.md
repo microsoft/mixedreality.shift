@@ -13,7 +13,7 @@
 ## Introduction
 Shift CLI is a command line interface tool that surfaces Shift Core functionality. 
 
-## Shift Core
+### Shift Core
 Shift always comes in pairs with a manifest file. A manifest file is a list of components and tasks that makes up a product. Think of components as lego pieces, and the tasks as an instruction set. Shift downloads the components from the location specified in the manifest file, and performs a set of instructions specified sequentially. Essentially, Shift Core analyzes and interprets the manifest file.
 
 ### manifest.json
@@ -67,8 +67,8 @@ Manifest contains a list of components, a list of bundles, component locations, 
 |            | id            | Unique identifier for the bundle                                                                                                                                                                                                      | "default"                                                                                                                                                                                                                                                                                              | string           |
 
 
-### Specifying the task
-#### Powershell task
+#### Specifying the task
+##### Powershell task
 
 You can specify a PowerShell task as below:
 ```
@@ -90,7 +90,7 @@ You can specify a PowerShell task as below:
     }
 }
 ```
-#### Custom task
+##### Custom task
 
 Shift also allows you to specify custom tasks. This is done through writing a custom plugin for your product. Implement the abstract class `PluginDefinition`, and add it to the list of plugin definitions in the `Program.cs` file within the cli project. Below is an example component with a custom plugin task. Reach out to chaelee@microsoft.com for questions.
 ```
@@ -129,7 +129,7 @@ You can also specify the network directory location to copy the file. This is no
 }
 ```
 
-## Shift CLI commands
+### Shift CLI commands
 ___
 `shift.exe init [--flavor flavor] [--version version]`
 
