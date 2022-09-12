@@ -16,20 +16,24 @@ using Shift.Core.Services.Manifests;
 namespace Shift.Cli.Commands
 {
     public sealed record DownloadCommandHandlerInput(
+        string path,
         string components,
         string versions,
-        string manifestPath
+        string bundle = null
         ) : BaseCommandHandlerInput;
 
     public class DownloadCommandHandler : BaseCommandHandler<DownloadCommandHandlerInput>
     {
+        private readonly IBundleService _bundleService;
         private readonly IComponentService _componentService;
 
         public DownloadCommandHandler(
+            IBundleService bundleService,
             IComponentService installationService,
             ILogger<DownloadCommandHandler> logger
         ) : base(logger)
         {
+            _bundleService = bundleService;
             _componentService = installationService;
         }
 
@@ -37,23 +41,30 @@ namespace Shift.Cli.Commands
             DownloadCommandHandlerInput input,
             CancellationToken cancellationToken)
         {
-            // Parse the inputs
-            var components = input.components.Split(",").Select(x => x.Trim()).ToArray();
-            string[] versions;
-            if (string.IsNullOrEmpty(input.versions))
+            if (!string.IsNullOrEmpty(input.bundle))
             {
-                versions = new string[components.Length];
+                return await _bundleService.DownloadBundleAsync(input.path, input.bundle);
             }
-            else
+            else if (!string.IsNullOrEmpty(input.components))
             {
-                versions = input.versions.Split(",").Select(x => x.Trim()).ToArray();
-                if (components.Length != versions.Length)
+                // Parse the inputs
+                var components = input.components.Split(",").Select(x => x.Trim()).ToArray();
+                string[] versions;
+                if (string.IsNullOrEmpty(input.versions))
                 {
-                    throw new ShiftException(ShiftResultCode.InvalidArgument, $"Arguments are invalid:\ncomponents: {input.components}\nversions: {input.versions}");
+                    versions = new string[components.Length];
                 }
+                else
+                {
+                    versions = input.versions.Split(",").Select(x => x.Trim()).ToArray();
+                    if (components.Length != versions.Length)
+                    {
+                        throw new ShiftException(ShiftResultCode.InvalidArgument, $"Arguments are invalid:\ncomponents: {input.components}\nversions: {input.versions}");
+                    }
+                }
+                return await _componentService.DownloadComponentsAsync(components, versions, input.path);
             }
-
-            return await _componentService.DownloadComponentsAsync(components, versions, input.manifestPath);
+            return ShiftResultCode.InvalidCommandLineOption;
         }
     }
 }

@@ -54,6 +54,12 @@ namespace Shift.Core.Services.Manifests
             return ShiftResultCode.Success;
         }
 
+        public async Task<ShiftResultCode> DownloadBundleAsync(string manifestPath, string bundle)
+        {
+            Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
+            return await DownloadBundleAsync(manifest, bundle);
+        }
+
         public async Task<ShiftResultCode> DownloadDefaultBundleAsync(Manifest manifest)
         {
             return await DownloadBundleAsync(manifest, "default");

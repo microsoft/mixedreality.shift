@@ -16,9 +16,9 @@ using Shift.Core.Services.Manifests;
 namespace Shift.Cli.Commands
 {
     public sealed record InstallCommandHandlerInput(
+        string path,
         string components,
         string versions,
-        string manifestPath,
         string bundle = null
         ) : BaseCommandHandlerInput;
 
@@ -43,7 +43,7 @@ namespace Shift.Cli.Commands
         {
             if (!string.IsNullOrEmpty(input.bundle))
             {
-                return await _installationService.InstallBundleAsync(input.bundle, input.manifestPath);
+                return await _installationService.InstallBundleAsync(input.bundle, input.path);
             }
             else if (!string.IsNullOrEmpty(input.components))
             {
@@ -62,7 +62,7 @@ namespace Shift.Cli.Commands
                         throw new ShiftException(ShiftResultCode.InvalidArgument, $"Arguments are invalid:\ncomponents: {input.components}\nversions: {input.versions}");
                     }
                 }
-                return await _componentService.InstallComponentsAsync(components, versions, input.manifestPath);
+                return await _componentService.InstallComponentsAsync(components, versions, input.path);
             }
             return ShiftResultCode.InvalidCommandLineOption;
         }

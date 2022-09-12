@@ -16,9 +16,19 @@ namespace Shift.Cli.Commands
     {
         public DownloadCommand() : base("download", "Downloads a specified set of components.")
         {
-            AddArgument(new Argument("components")
+            AddArgument(new Argument("path")
+            {
+                Description = "The path to the local manifest."
+            });
+
+            AddOption(new Option<string>(new string[] { "--components", "-c" })
             {
                 Description = "A comma-separated list of components to download."
+            });
+
+            AddOption(new Option<string>(new string[] { "--bundle", "-b" })
+            {
+                Description = "Bundle to download."
             });
 
             AddOption(new Option<string>(new string[] { "--versions", "-v" })

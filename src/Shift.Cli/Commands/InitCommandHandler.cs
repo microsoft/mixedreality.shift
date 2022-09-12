@@ -14,7 +14,7 @@ using Shift.Core.Services;
 namespace Shift.Cli.Commands
 {
     public sealed record InitCommandHandlerInput(
-       string Path
+       string path
        ) : BaseCommandHandlerInput;
 
     public class InitCommandHandler : BaseCommandHandler<InitCommandHandlerInput>
@@ -33,7 +33,7 @@ namespace Shift.Cli.Commands
             InitCommandHandlerInput input,
             CancellationToken cancellationToken)
         {
-            return await _installationService.InitLocalAsync(input.Path);
+            return await _installationService.InitLocalAsync(input.path);
         }
     }
 }
