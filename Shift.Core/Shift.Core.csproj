@@ -6,7 +6,7 @@
 		<Company>Microsoft Corporation</Company>
 		<Authors>MixedReality ApES-Inner</Authors>
 		<Copyright>Copyright © Microsoft Corporation</Copyright>
-		<RepositoryUrl>https://microsoft.visualstudio.com//Analog/_git/mixedreality.devtools</RepositoryUrl>
+		<RepositoryUrl>https://github.com/microsoft/shift</RepositoryUrl>
 		<PackageTags>MixedReality;ApES</PackageTags>
 		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
 		<RootNamespace>Shift.Core</RootNamespace>
