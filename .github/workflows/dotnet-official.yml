@@ -24,4 +24,4 @@ jobs:
     - name: Build Nuget
       run: dotnet pack Shift.Core --configuration Release
     - name: Publish Nuget
-      run: dotnet nuget push "Shift.Core\bin\Release/Shift.Core.1.0.0.nupkg" --api-key ${{ secrets.PERSONAL_ACCESS_TOKEN }} --source "github"
+      run: dotnet nuget push "Shift.Core\bin\Release/Shift.Core.1.0.0.nupkg" --api-key ${{ secrets.NUGET_PACKAGES_PAT }} --source "github"
