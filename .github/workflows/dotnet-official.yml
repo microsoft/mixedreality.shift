@@ -10,18 +10,28 @@ jobs:
     runs-on: windows-2022
 
     steps:
+
     - name: Checking out Code
       uses: actions/checkout@v2
+
     - name: Installing .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.400
         include-prerelease: false
+
     - name: Restoring Packages
       run: dotnet restore
+
     - name: Building Project(s)
       run: dotnet build --no-restore
-    - name: Build Nuget
+
+    - name: Pack Shift.Core NuGet
       run: dotnet pack Shift.Core --configuration Release
+
     - name: Publish Nuget
-      run: dotnet nuget push "Shift.Core\bin\Release/Shift.Core.1.0.0.nupkg" --api-key ${{ secrets.NUGET_PACKAGES_PAT }} --source "github"
+      run: >-
+        dotnet nuget push 
+        --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
+        --source https://nuget.pkg.github.com/microsoft/index.json
+        "**/*.nupkg"
