@@ -1,4 +1,4 @@
-name: .NET
+name: Official - Publish NuGet
 
 on:
   push:
