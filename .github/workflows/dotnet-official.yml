@@ -4,12 +4,6 @@ on:
   push:
     branches: [ "main" ]
 
-variables:
-  major: 0
-  minor: 0
-  patch: $[counter(variables['minor'], 0)]
-  shiftVersion: $(major).$(minor).$(patch)
-
 jobs:
   build:
 
@@ -33,7 +27,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Pack Shift.Core NuGet
-      run: dotnet pack Shift.Core --configuration Release -p:PackageVersion=$(shiftVersion)
+      run: dotnet pack Shift.Core --configuration Release -p:PackageVersion=0.0.${{ github.run_id }}
 
     - name: Publish Nuget
       run: >-
