@@ -1,0 +1,94 @@
+{
+  "components": [
+    {
+      "id": "noTaskTestComponent",
+      "description": "Test component with no task",
+      "owner": "chaelee",
+      "deviceDemands": [ "windows" ],
+      "location": {
+        "organization": "microsoft",
+        "project": "",
+        "scope": "",
+        "feed": "",
+        "name": "",
+        "version": ""
+      },
+      "task": null
+    },
+    {
+      "id": "pluginTestComponent",
+      "description": "Test component with plugin task type",
+      "owner": "chaelee",
+      "deviceDemands": [ "hmd" ],
+      "location": {
+        "organization": "microsoft",
+        "project": "",
+        "scope": "",
+        "feed": "",
+        "name": "",
+        "version": ""
+      },
+      "task": {
+        "type": "exampleTask",
+        "action": "Hello, World!"
+      }
+    },
+    {
+      "id": "pwshTestComponent",
+      "description": "Test component with powersell task type",
+      "owner": "chaelee",
+      "deviceDemands": [ "windows", "companion" ],
+      "location": {
+        "organization": "microsoft",
+        "project": "",
+        "scope": "",
+        "feed": "",
+        "name": "",
+        "version": ""
+      },
+      "task": {
+        "type": "pwsh",
+        "script": "echo \"Hello, mrshift\""
+      }
+    },
+    {
+      "id": "directoryTestComponent",
+      "description": "Tests a component that is download only, no task.",
+      "owner": "",
+      "deviceDemands": [ "windows", "companion" ],
+      "location": {
+        "path": "\\\\mrfs\\private\\openxr\\ARDK-WinInProcVulkan\\CannonDemo"
+      }
+    }
+  ],
+  "Bundles": [
+    {
+      "Bundles": [
+        "bundle1",
+        "bundle2"
+      ],
+      "Components": [
+        "directoryTestComponent"
+      ],
+      "Description": "The default test bundle",
+      "Id": "default"
+    },
+    {
+      "Bundles": null,
+      "Components": [
+        "noTaskTestComponent",
+      ],
+      "Description": "Test bundle 1",
+      "Id": "bundle1"
+    },
+    {
+      "Bundles": null,
+      "Components": [
+        "pluginTestComponent",
+        "pwshTestComponent",
+      ],
+      "Description": "Test bundle 2",
+      "Id": "bundle2"
+    }
+  ]
+}
