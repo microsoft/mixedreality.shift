@@ -7,14 +7,17 @@ on:
 jobs:
   build:
 
-    env:
-      BUILD_VERSION: '0.0.0-alpha'
-
     runs-on: windows-2022
 
     steps:
     - name: Checking out Code
       uses: actions/checkout@v2
+    
+    - name: Get version
+      id: version
+      uses: paulhatch/semantic-version@v4.0.3
+      with:
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
 
     - name: Installing .NET
       uses: actions/setup-dotnet@v1
@@ -26,13 +29,13 @@ jobs:
       run: dotnet restore
 
     - name: Building Project(s)
-      run: dotnet build -p:Version=$BUILD_VERSION --no-restore
+      run: dotnet build -p:Version=${{ steps.version.outputs.version }} --no-restore
 
     - name: Pack Shift.Core NuGet
       run: >-
         dotnet pack Shift.Core
         --configuration Release
-        -p:PackageVersion=$BUILD_VERSION
+        -p:PackageVersion=${{ steps.version.outputs.version }}
 
     - name: Publish Nuget
       run: >-
