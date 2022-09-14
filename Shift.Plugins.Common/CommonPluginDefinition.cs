@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using Shift.Core.Models.Manifests.Tasks;
 using Shift.Core.Models.Plugins;
+using Shift.Plugins.Common.Models.Manifest.Tasks;
 
 namespace Shift.Plugins.Common
 {
@@ -28,6 +29,7 @@ namespace Shift.Plugins.Common
             return new List<IComponentTask>
             {
                 // Add custom tasks here
+                new ExampleComponentTask()
             };
         }
     }
