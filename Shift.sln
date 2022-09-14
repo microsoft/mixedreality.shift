@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.Core", "Shift.Core\Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.Plugins.Common", "Shift.Plugins.Common\Shift.Plugins.Common.csproj", "{A63F6D48-F391-4141-8FD5-A7557A72E323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shift.UnitTests", "Shift.UnitTests\Shift.UnitTests.csproj", "{9346E765-BD33-4FED-88B4-11D28A53D1B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.UnitTests", "Shift.UnitTests\Shift.UnitTests.csproj", "{9346E765-BD33-4FED-88B4-11D28A53D1B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shift.IntegrationTests", "Shift.IntegrationTests\Shift.IntegrationTests.csproj", "{233C24A6-52AF-4C67-AC32-25162F8AEEDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{233C24A6-52AF-4C67-AC32-25162F8AEEDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{233C24A6-52AF-4C67-AC32-25162F8AEEDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{233C24A6-52AF-4C67-AC32-25162F8AEEDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{233C24A6-52AF-4C67-AC32-25162F8AEEDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
