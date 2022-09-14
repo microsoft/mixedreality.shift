@@ -4,6 +4,12 @@ on:
   push:
     branches: [ "main" ]
 
+variables:
+  major: 0
+  minor: 0
+  patch: $[counter(variables['minor'], 0)]
+  shiftVersion: $(major).$(minor).$(patch)
+
 jobs:
   build:
 
@@ -27,7 +33,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Pack Shift.Core NuGet
-      run: dotnet pack Shift.Core --configuration Release
+      run: dotnet pack Shift.Core --configuration Release -p:PackageVersion=$(shiftVersion)
 
     - name: Publish Nuget
       run: >-
@@ -35,3 +41,11 @@ jobs:
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
         --source https://nuget.pkg.github.com/microsoft/index.json
         "**/*.nupkg"
+    
+    - name: Azure pipeline trigger
+      uses: Azure/pipelines@v1
+      with:
+        azure-devops-project-url: https://dev.azure.com/microsoft/Analog
+        azure-pipeline-name: 'mixedreality.devtools-Official'
+        azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+
