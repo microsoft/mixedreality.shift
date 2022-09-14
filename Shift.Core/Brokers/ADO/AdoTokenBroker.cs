@@ -31,30 +31,24 @@ namespace Shift.Core.Brokers
             {
                 return pat;
             }
-            else
+            // load from env var
+            var token = Environment.GetEnvironmentVariable($"AZURE_DEVOPS_EXT_PAT_{organization}");
+            if (!string.IsNullOrWhiteSpace(token))
             {
-                // load from env var
-                var token = Environment.GetEnvironmentVariable($"AZURE_DEVOPS_EXT_PAT_{organization}");
-                if (!string.IsNullOrWhiteSpace(token))
-                {
-                    _cache[organization] = token;
-                    return token;
-                }
-                else
-                {
-                    try
-                    {
-                        var tokenCredential = new DefaultAzureCredential();
-                        var authResult = await tokenCredential.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AdoResourceId + "/.default" }));
-                        _cache[organization] = authResult.Token;
-                        return authResult.Token;
-                    }
-                    catch (Exception ex)
-                    {
-                        var msg = "ERROR: Unable to acquire Azure Authentication token! Ensure successful azure login by running 'az login' from the command prompt.";
-                        throw new ShiftException(ShiftResultCode.Unauthorized, msg, ex, isFatal: true);
-                    }
-                }
+                _cache[organization] = token;
+                return token;
+            }
+            try
+            {
+                var tokenCredential = new DefaultAzureCredential();
+                var authResult = await tokenCredential.GetTokenAsync(new TokenRequestContext(scopes: new string[] { AdoResourceId + "/.default" }));
+                _cache[organization] = authResult.Token;
+                return authResult.Token;
+            }
+            catch (Exception ex)
+            {
+                var msg = "ERROR: Unable to acquire Azure Authentication token! Ensure successful azure login by running 'az login' from the command prompt.";
+                throw new ShiftException(ShiftResultCode.Unauthorized, msg, ex, isFatal: true);
             }
         }
     }

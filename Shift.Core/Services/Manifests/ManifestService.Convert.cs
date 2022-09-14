@@ -93,11 +93,8 @@ namespace Shift.Core.Services.Manifests
             {
                 return null;
             }
-            else
-            {
-                var task = _taskProvider.GetComponentTask(model.Type);
-                return task.ConvertToContract(model) as TaskInfoV1;
-            }
+            var task = _taskProvider.GetComponentTask(model.Type);
+            return task.ConvertToContract(model) as TaskInfoV1;
         }
 
         private Manifest Convert(ManifestV1 contract)
