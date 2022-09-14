@@ -1,4 +1,4 @@
-name: Official - Publish NuGet
+name: Prerelease
 
 on:
   push:
@@ -7,10 +7,12 @@ on:
 jobs:
   build:
 
+    env:
+      BUILD_VERSION: '0.0.0-alpha'
+
     runs-on: windows-2022
 
     steps:
-
     - name: Checking out Code
       uses: actions/checkout@v2
 
@@ -18,22 +20,25 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.400
-        include-prerelease: false
+        include-prerelease: true
 
     - name: Restoring Packages
       run: dotnet restore
 
     - name: Building Project(s)
-      run: dotnet build --no-restore
+      run: dotnet build -p:Version=$BUILD_VERSION --no-restore
 
     - name: Pack Shift.Core NuGet
-      run: dotnet pack Shift.Core --configuration Release -p:PackageVersion=0.0.${{ github.run_id }}
+      run: >-
+        dotnet pack Shift.Core
+        --configuration Release
+        -p:PackageVersion=$BUILD_VERSION
 
     - name: Publish Nuget
       run: >-
         dotnet nuget push 
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
-        --source https://nuget.pkg.github.com/microsoft/index.json
+        --source https://api.nuget.org/v3/index.json
         "**/*.nupkg"
     
     - name: Azure pipeline trigger
