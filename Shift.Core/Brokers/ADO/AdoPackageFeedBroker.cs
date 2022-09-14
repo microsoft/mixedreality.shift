@@ -202,7 +202,11 @@ namespace Shift.Core.Brokers
                 _ => "x86_64",
             };
 
-            // get os name
+            osName = GetOSName();
+        }
+
+        private string GetOSName() {
+            string osName;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 osName = "Windows";
@@ -219,6 +223,7 @@ namespace Shift.Core.Brokers
             {
                 osName = string.Empty;
             }
+            return osName;
         }
 
         private async Task<string> InstallArtifactToolAsync(
