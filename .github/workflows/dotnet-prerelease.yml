@@ -17,7 +17,7 @@ jobs:
       id: version
       uses: paulhatch/semantic-version@v4.0.3
       with:
-        format: "${major}.${minor}.${patch}-prerelease${increment}"
+        format: "${major}.${minor}.${patch}-prerelease"
 
     - name: Installing .NET
       uses: actions/setup-dotnet@v1
@@ -29,20 +29,24 @@ jobs:
       run: dotnet restore
 
     - name: Building Project(s)
-      run: dotnet build -p:Version=${{ steps.version.outputs.version }} --no-restore
+      run: >-
+        dotnet build 
+        -p:Version=${{ steps.version.outputs.version }} 
+        --no-restore
 
     - name: Pack Shift.Core NuGet
       run: >-
         dotnet pack Shift.Core
         --configuration Release
         -p:PackageVersion=${{ steps.version.outputs.version }}
+        -p:PackageId=Microsoft.Shift.Core
 
     - name: Publish Nuget
       run: >-
         dotnet nuget push 
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
         --source https://api.nuget.org/v3/index.json
-        "**/*.nupkg"
+        "**/*Shift.Core*.nupkg"
     
     - name: Azure pipeline trigger
       uses: Azure/pipelines@v1
