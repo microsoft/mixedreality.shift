@@ -45,7 +45,7 @@ jobs:
       run: >-
         dotnet nuget push 
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
-        --source https://api.nuget.org/v3/index.json
+        --source https://nuget.pkg.github.com/microsoft/index.json
         "**/*Shift.Core*.nupkg"
     
     - name: Azure pipeline trigger
@@ -54,4 +54,3 @@ jobs:
         azure-devops-project-url: https://dev.azure.com/microsoft/Analog
         azure-pipeline-name: 'mixedreality.devtools-Official'
         azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
-
