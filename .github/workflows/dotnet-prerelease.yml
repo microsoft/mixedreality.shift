@@ -38,5 +38,5 @@ jobs:
       uses: Azure/pipelines@v1
       with:
         azure-devops-project-url: https://dev.azure.com/microsoft/Analog
-        azure-pipeline-name: 'mixedreality.devtools.shift'
+        azure-pipeline-name: 'microsoft.shift'
         azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
