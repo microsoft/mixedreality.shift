@@ -3,17 +3,55 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
+resources:
+  repositories:
+    - repository: shift
+      type: github
+      name: microsoft/shift
+      endpoint: github.com_chaehonglee
+      ref: refs/heads/main
 
 pool:
-  vmImage: ubuntu-latest
+  name: Analog-1ES-Server2022
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+jobs:
+- job:
+  timeoutInMinutes: 360
+  steps:
+  - checkout: self
+  - checkout: shift
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  # restore nuget
+  - task: NuGetCommand@2
+    inputs:
+      command: 'restore'
+      restoreSolution: '**\Shift.sln'
+      feedsToUse: 'select'
+
+  # build shift 
+  - task: VSBuild@1
+    inputs:
+      solution: '**\Shift.sln'
+      vsVersion: '17.0'
+      platform: '$(BuildPlatform)'
+      configuration: '$(BuildConfiguration)'
+      maximumCpuCount: true
+      restoreNugetPackages: true
+  
+  # pack nuget
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: 'shift/**/Shift.Core.csproj'
+      versioningScheme: 'byPrereleaseNumber'
+      majorVersion: '0'
+      minorVersion: '0'
+      patchVersion: '0'
+  
+  # publish nuget
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '8115054f-1c74-4928-a9ab-de4769e7d6ae/2c4a69a6-14e2-4ffb-814a-95334a7e9366'
