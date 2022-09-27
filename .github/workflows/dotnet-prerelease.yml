@@ -33,20 +33,6 @@ jobs:
         dotnet build 
         -p:Version=${{ steps.version.outputs.version }} 
         --no-restore
-
-    - name: Pack Shift.Core NuGet
-      run: >-
-        dotnet pack Shift.Core
-        --configuration Release
-        -p:PackageVersion=${{ steps.version.outputs.version }}
-        -p:PackageId=Microsoft.Shift.Core
-
-    - name: Publish Nuget
-      run: >-
-        dotnet nuget push 
-        --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
-        --source https://nuget.pkg.github.com/microsoft/index.json
-        "**/*Shift.Core*.nupkg"
     
     - name: Azure pipeline trigger
       uses: Azure/pipelines@v1
