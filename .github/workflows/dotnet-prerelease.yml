@@ -33,10 +33,3 @@ jobs:
         dotnet build 
         -p:Version=${{ steps.version.outputs.version }} 
         --no-restore
-    
-    - name: Azure pipeline trigger
-      uses: Azure/pipelines@v1
-      with:
-        azure-devops-project-url: https://dev.azure.com/microsoft/Analog
-        azure-pipeline-name: 'microsoft.shift'
-        azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
