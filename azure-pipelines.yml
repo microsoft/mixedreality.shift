@@ -37,17 +37,7 @@ jobs:
       configuration: '$(BuildConfiguration)'
       maximumCpuCount: true
       restoreNugetPackages: true
-  
-  # pack nuget
-  - task: NuGetCommand@2
-    inputs:
-      command: 'pack'
-      packagesToPack: 'shift/**/Shift.Core.csproj'
-      versioningScheme: 'byPrereleaseNumber'
-      majorVersion: '1'
-      minorVersion: '0'
-      patchVersion: '1'
-      buildProperties: 'IncludeReferencedProjects=true'
+      msbuildArgs: '-property:Version=1.0.1'
   
   # publish nuget
   - task: NuGetCommand@2
