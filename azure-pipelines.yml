@@ -43,7 +43,7 @@ jobs:
     inputs:
       command: 'pack'
       packagesToPack: 'shift/**/Shift.Core.csproj'
-      # versioningScheme: 'byPrereleaseNumber'
+      versioningScheme: 'byPrereleaseNumber'
       majorVersion: '1'
       minorVersion: '0'
       patchVersion: '1'
