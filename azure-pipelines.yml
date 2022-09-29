@@ -43,6 +43,6 @@ jobs:
   - task: NuGetCommand@2
     inputs:
       command: 'push'
-      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      packagesToPush: '**/*.nupkg;!**/*.symbols.nupkg'
       nuGetFeedType: 'internal'
       publishVstsFeed: '8115054f-1c74-4928-a9ab-de4769e7d6ae/2c4a69a6-14e2-4ffb-814a-95334a7e9366'
