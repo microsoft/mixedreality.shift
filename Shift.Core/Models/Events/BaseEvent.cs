@@ -4,6 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace Shift.Core.Models.Events
 {
     public class BaseEvent
@@ -12,5 +14,6 @@ namespace Shift.Core.Models.Events
         public string EventName => GetType().Name;
         public bool ExceptionOcurred { get; set; }
         public string ResultCode { get; set; }
+        public string ShiftVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
     }
 }
