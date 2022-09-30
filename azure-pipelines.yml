@@ -20,6 +20,12 @@ jobs:
   steps:
   - checkout: self
   - checkout: shift
+  
+  # get latest nuget tool installer
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec:
+      checkLatest: true
 
   # restore nuget
   - task: NuGetCommand@2
