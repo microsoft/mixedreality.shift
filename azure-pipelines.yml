@@ -43,7 +43,7 @@ jobs:
       configuration: '$(BuildConfiguration)'
       maximumCpuCount: true
       restoreNugetPackages: true
-      msbuildArgs: '-property:Version=1.0.1'
+      msbuildArgs: '-property:Version=1.0.2'
   
   # publish nuget
   - task: NuGetCommand@2
