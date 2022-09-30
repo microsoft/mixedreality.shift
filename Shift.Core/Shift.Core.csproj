@@ -26,6 +26,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.*"></PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Services.Packaging.Client" Version="16.193.0-preview" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
+		<PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
 		<PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.193.0-preview" />
 	</ItemGroup>
 
