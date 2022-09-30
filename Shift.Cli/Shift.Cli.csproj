@@ -18,11 +18,6 @@
 	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	<RootNamespace>Microsoft.Internal.MR.ES.Shift.Cli</RootNamespace>
   </PropertyGroup>
-	
-  <ItemGroup>
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
-    <PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Shift.Core\Shift.Core.csproj" />

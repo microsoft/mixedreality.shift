@@ -52,10 +52,6 @@ namespace Shift.UnitTests.ServiceTests
         public async Task ReleaseService_CreateReleaseAsync()
         {
             // arrange
-            var organization = "test-organization";
-            var project = "test-project";
-            var feed = "test-feed";
-            var packageName = "test-package";
             var releaseService = new ReleaseService(
                 _componentService.Object,
                 _manifestService.Object,
@@ -64,7 +60,7 @@ namespace Shift.UnitTests.ServiceTests
                 NullLogger<ReleaseService>.Instance);
 
             // act
-            var result = await releaseService.CreateReleaseAsync(organization, project, feed, packageName);
+            var result = await releaseService.CreateReleaseAsync("test.json", "test.zip");
 
             // assert
             Assert.Equals(ShiftResultCode.Success, result);
