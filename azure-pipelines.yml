@@ -2,6 +2,11 @@
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+variables:
+  major: 1
+  minor: 1
+  patch: $[counter(variables['minor'], 0)]
+  shiftVersion: $(major).$(minor).$(patch) # for versioning shift builds
 
 resources:
   repositories:
@@ -43,7 +48,7 @@ jobs:
       configuration: '$(BuildConfiguration)'
       maximumCpuCount: true
       restoreNugetPackages: true
-      msbuildArgs: '-property:Version=1.0.2'
+      msbuildArgs: '-property:Version=$(shiftVersion)'
   
   # publish nuget
   - task: NuGetCommand@2
