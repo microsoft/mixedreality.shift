@@ -5,6 +5,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -46,10 +47,8 @@ namespace Shift.Core.Services
         }
 
         public async Task<ShiftResultCode> CreateReleaseAsync(
-            string organization,
-            string project,
-            string feed,
-            string packageName)
+            string manifestPath,
+            string archivePath)
         {
             var telemetryEvent = new CreateReleaseEvent();
             var stopwatch = Stopwatch.StartNew();
@@ -58,28 +57,26 @@ namespace Shift.Core.Services
 
             try
             {
-                string version = await _packageFeedService.GetLatestVersionAsStringAsync(organization, project, feed, packageName);
+                var downloadRoot = Path.Combine(Path.GetTempPath(), "mrshift-" + Guid.NewGuid().ToString());
+                Manifest manifest = await _manifestProcessingService.GetManifestAsync(manifestPath);
 
-                string downloadRoot = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), $"{packageName}-release-{version}");
-                await _packageFeedService.DownloadArtifactAsync(downloadRoot, feed, packageName, project, version);
-                Manifest manifest = await _manifestProcessingService.GetManifestAsync(Path.Join(downloadRoot, "manifest.json"));
+                // Copy manifest to download root
+                Directory.CreateDirectory(downloadRoot);
+                File.Copy(manifestPath, Path.Combine(downloadRoot, "manifest.json"));
 
-                // download all the components
+                // Copy self (mrshift) to download root
+                File.Copy(Process.GetCurrentProcess().MainModule.FileName, Path.Combine(downloadRoot, "mrshift.exe"), true);
+
+                // Download all the components into the download root
+                var downloadTasks = new List<Task>();
                 foreach (var component in manifest.Components)
                 {
-                    var downloadPath = await _componentInstallationService.DownloadComponentAsync(component, downloadRoot);
-                    _logger.LogInformation($"Component {component.Id} downloaded to {downloadPath}");
+                    downloadTasks.Add(_componentInstallationService.DownloadComponentAsync(component, downloadRoot));
                 }
 
-                // Download the latest mrshift
-                string shiftFeed = _configuration.GetValue<string>("feed");
-                string shiftPackageName = _configuration.GetValue<string>("packageName");
-                string shiftProject = _configuration.GetValue<string>("project");
-                string shiftVersion = await _packageFeedService.GetLatestVersionAsStringAsync(organization, shiftProject, shiftFeed, shiftPackageName);
+                await Task.WhenAll(downloadTasks);
 
-                await _packageFeedService.DownloadArtifactAsync(Path.Join(downloadRoot, "mrshift"), shiftFeed, shiftPackageName, shiftProject, shiftVersion);
-
-                _logger.LogInformation($"Release image can be found under {downloadRoot}");
+                _logger.LogInformation($"Release archive can be found at {archivePath}");
                 resultCode = ShiftResultCode.Success;
                 return resultCode;
             }
