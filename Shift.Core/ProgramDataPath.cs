@@ -16,7 +16,6 @@ namespace Shift.Core
         public static string GetPacakgeInstallationPath(string packageName, string feedName, string version)
         {
             return Path.Combine(rootPath, packageName, feedName, version) + "\\";
-
         }
 
         public static string GetRootPath()

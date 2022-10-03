@@ -32,10 +32,7 @@ namespace Shift.Core.Services.Common
         {
             getInput.Set();
             bool success = gotInput.WaitOne(timeOutMillisecs);
-            if (success)
-                return input;
-            else
-                throw new TimeoutException($"User did not provide input within {timeOutMillisecs / 1000f} seconds.");
+            return success ? input : throw new TimeoutException($"User did not provide input within {timeOutMillisecs / 1000f} seconds.");
         }
 
         private static void reader()
