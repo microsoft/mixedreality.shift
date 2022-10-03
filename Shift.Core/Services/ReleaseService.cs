@@ -58,6 +58,15 @@ namespace Shift.Core.Services
 
             try
             {
+                // make sure archive path doesn't exist
+                archivePath = archivePath.EndsWith(".zip") ? archivePath : archivePath + ".zip";
+                if (Directory.Exists(archivePath))
+                {
+                    throw new ShiftException(
+                        ShiftResultCode.InvalidUserInput,
+                        message: $"Release directory already exists: {archivePath}");
+                }
+
                 var downloadRoot = Path.Combine(Path.GetTempPath(), "mrshift-" + Guid.NewGuid().ToString());
                 Manifest manifest = await _manifestProcessingService.GetManifestAsync(manifestPath);
 
@@ -78,7 +87,6 @@ namespace Shift.Core.Services
                 await Task.WhenAll(downloadTasks);
 
                 // create release artifact
-                archivePath = archivePath.EndsWith(".zip") ? archivePath : archivePath + ".zip";
                 ZipFile.CreateFromDirectory(downloadRoot, archivePath);
                 Directory.Delete(downloadRoot, recursive: true);
 
