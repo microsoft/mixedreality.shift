@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -75,6 +76,10 @@ namespace Shift.Core.Services
                 }
 
                 await Task.WhenAll(downloadTasks);
+
+                // create release artifact
+                ZipFile.CreateFromDirectory(downloadRoot, archivePath);
+                Directory.Delete(downloadRoot, recursive: true);
 
                 _logger.LogInformation($"Release archive can be found at {archivePath}");
                 resultCode = ShiftResultCode.Success;
