@@ -78,6 +78,7 @@ namespace Shift.Core.Services
                 await Task.WhenAll(downloadTasks);
 
                 // create release artifact
+                archivePath = archivePath.EndsWith(".zip") ? archivePath : archivePath + ".zip";
                 ZipFile.CreateFromDirectory(downloadRoot, archivePath);
                 Directory.Delete(downloadRoot, recursive: true);
 
