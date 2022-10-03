@@ -9,7 +9,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.Core", "Shift.Core\Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.Plugins.Common", "Shift.Plugins.Common\Shift.Plugins.Common.csproj", "{A63F6D48-F391-4141-8FD5-A7557A72E323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shift.UnitTests", "Shift.UnitTests\Shift.UnitTests.csproj", "{9346E765-BD33-4FED-88B4-11D28A53D1B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.UnitTests", "Shift.UnitTests\Shift.UnitTests.csproj", "{9346E765-BD33-4FED-88B4-11D28A53D1B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".pipelines", ".pipelines", "{63C14135-A4DE-4378-B641-969573B82AD6}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines.yml = azure-pipelines.yml
+		.github\workflows\dotnet-pr.yml = .github\workflows\dotnet-pr.yml
+		.github\workflows\dotnet-prerelease.yml = .github\workflows\dotnet-prerelease.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
