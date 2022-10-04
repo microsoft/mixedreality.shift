@@ -14,6 +14,6 @@ namespace Shift.Core.Models.Events
         public string EventName => GetType().Name;
         public bool ExceptionOcurred { get; set; }
         public string ResultCode { get; set; }
-        public string ShiftVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
+        public string ShiftCoreSDKVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString(4);
     }
 }
