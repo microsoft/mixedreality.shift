@@ -28,7 +28,7 @@ jobs:
     - name: Generate Git Tag
       uses: EndBug/latest-tag@latest
       with:
-        ref: ${{ steps.version.outputs.version_tag }}
+        ref: ${{ steps.version.outputs.version }}
 
     - name: Installing .NET
       uses: actions/setup-dotnet@v1
