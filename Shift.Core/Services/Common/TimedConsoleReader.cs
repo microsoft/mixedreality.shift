@@ -18,6 +18,7 @@ namespace Shift.Core.Services.Common
         private static AutoResetEvent getInput, gotInput;
         private static string input;
         private static Thread inputThread;
+
         static TimedConsoleReader()
         {
             getInput = new AutoResetEvent(false);

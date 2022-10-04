@@ -4,8 +4,8 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Shift.Core.Models.Common;
 using System.Threading.Tasks;
+using Shift.Core.Models.Common;
 
 namespace Shift.Core.Services.Manifests
 {

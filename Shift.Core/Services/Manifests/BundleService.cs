@@ -20,6 +20,7 @@ namespace Shift.Core.Services.Manifests
         private readonly IComponentService _componentProcessor;
         private readonly ILogger<BundleService> _logger;
         private readonly IManifestService _manifestService;
+
         public BundleService(
             IComponentService componentProcessor,
             IManifestService manifestService,

@@ -24,6 +24,7 @@ namespace Shift.Core.Services.Manifests
         private readonly IManifestService _manifestProcessingService;
         private readonly IPackageFeedService _packageFeedService;
         private readonly IServiceProvider _serviceProvider;
+
         public ComponentService(
             IComponentTaskProvider componentTaskProvider,
             ILogger<ComponentService> logger,

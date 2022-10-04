@@ -98,7 +98,6 @@ namespace Shift.Core.Services.Manifests
             Manifest manifest = await _manifestProcessingService.DownloadManifestAndConvertAsync(packageName, organization, project, feed);
 
             return await DownloadComponentsAsync(components, versions, manifest);
-
         }
 
         public async Task<ShiftResultCode> DownloadComponentsAsync(

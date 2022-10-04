@@ -205,7 +205,8 @@ namespace Shift.Core.Brokers
             osName = GetOSName();
         }
 
-        private string GetOSName() {
+        private string GetOSName()
+        {
             string osName;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

@@ -69,6 +69,7 @@ namespace Shift.Core.Services.Manifests
 
             return Encoding.UTF8.GetBytes(json);
         }
+
         private ManifestV1 Convert(Manifest model)
         {
             return new ManifestV1

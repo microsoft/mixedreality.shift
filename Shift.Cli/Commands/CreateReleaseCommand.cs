@@ -4,12 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Commands;
 using Shift.Core.Models.Common;
 using Shift.Core.Services;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace Microsoft.Internal.MR.ES.Shift.Cli.Commands
 {
