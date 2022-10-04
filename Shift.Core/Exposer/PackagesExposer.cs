@@ -21,6 +21,7 @@ namespace Shift.Core.Exposer
         private readonly IComponentService _componentService;
         private readonly ILogger<PackagesExposer> _logger;
         private readonly IManifestService _manifestService;
+
         public PackagesExposer(
             IManifestService manifestService,
             IComponentService componentService,

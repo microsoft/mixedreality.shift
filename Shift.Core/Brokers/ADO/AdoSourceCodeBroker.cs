@@ -24,6 +24,7 @@ namespace Shift.Core.Brokers
         private readonly VssBasicCredential _collectionCredentials;
         private readonly string _collectionPat;
         private readonly ILogger<AdoSourceCodeBroker> _logger;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoSourceCodeBroker"/> class.
         /// </summary>
@@ -34,7 +35,6 @@ namespace Shift.Core.Brokers
             _collectionPat = tokenBroker.GetTokenCredentialAsync().Result;
             _collectionCredentials = new VssBasicCredential(string.Empty, _collectionPat);
             _logger = logger;
-
         }
 
         /// <summary>

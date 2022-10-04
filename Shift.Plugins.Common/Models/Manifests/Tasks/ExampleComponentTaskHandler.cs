@@ -4,10 +4,10 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Models.Manifests;
 using Shift.Core.Services.Manifests.Tasks;
-using System.Threading.Tasks;
 
 namespace Shift.Plugins.Common.Models.Manifest.Tasks
 {

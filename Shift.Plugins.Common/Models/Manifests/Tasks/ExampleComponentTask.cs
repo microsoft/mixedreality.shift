@@ -4,7 +4,6 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-
 using Shift.Core.Models.Manifests.Tasks;
 using Shift.Plugins.Common.Contracts.Manifests.Tasks;
 

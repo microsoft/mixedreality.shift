@@ -192,7 +192,7 @@ namespace Shift.Core.Services
         }
 
         private async Task<ShiftResultCode> InstallBundleAsync(
-            string bundle, 
+            string bundle,
             Manifest manifest)
         {
             var telemetryEvent = new InstallEvent();

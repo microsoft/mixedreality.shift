@@ -4,6 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Brokers;
 using Shift.Core.Models.Artifacts;
@@ -12,11 +17,6 @@ using Shift.Core.Models.Events;
 using Shift.Core.Models.Manifests;
 using Shift.Core.Services.Artifacts;
 using Shift.Core.Services.Serialization;
-using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Shift.Core.Services.Manifests
 {
@@ -93,7 +93,7 @@ namespace Shift.Core.Services.Manifests
                                 var versions = await _packageFeedService.GetPackageVersionsAsync(
                                     collectionUri: packageLocation.Organization,
                                     projectName: packageLocation.Project,
-                                    feedName: packageLocation.Feed, 
+                                    feedName: packageLocation.Feed,
                                     packageName: packageLocation.Name);
 
                                 // go to latest according to strategy & filters

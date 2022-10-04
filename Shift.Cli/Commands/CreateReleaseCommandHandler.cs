@@ -4,11 +4,11 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using Microsoft.Extensions.Hosting;
-using System.CommandLine.Invocation;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Microsoft.Internal.MR.ES.Shift.Cli.Commands
 {

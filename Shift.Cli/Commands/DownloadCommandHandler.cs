@@ -7,7 +7,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Commands;
 using Shift.Core.Models.Common;
