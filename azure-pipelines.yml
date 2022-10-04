@@ -1,7 +1,9 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# [Note] We have a separate pipeline for publishing the package to an ADO feed
+# to be able to consume it from microsoft internal libraries with already
+# established service connection. ADO currently only supports one nuget feed connection.
+# If ADO allows adding the Github Nuget connection endpoint, 
+# this pipeline may be disabled and start consuming Shift Core from Github Nuget endpoint.
+
 variables:
   major: 1
   minor: 1
