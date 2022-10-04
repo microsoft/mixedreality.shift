@@ -34,7 +34,7 @@ jobs:
         -p:Version=${{ steps.version.outputs.version }} 
         --no-restore
 
-    - name: Publish Nuget to Github endpoint
+    - name: Publish Nuget
       run: >-
         dotnet nuget push 
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
