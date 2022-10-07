@@ -24,6 +24,7 @@ jobs:
         minor_pattern: "(MINOR)"
         bump_each_commit: false
         format: "${major}.${minor}.${patch}"
+        tag_prefix:
         
     - name: Generate Git Tag
       uses: EndBug/latest-tag@latest
