@@ -67,15 +67,22 @@ namespace Shift.Core.Services
                         message: $"Release directory already exists: {archivePath}");
                 }
 
-                var downloadRoot = Path.Combine(Path.GetTempPath(), "mrshift-" + Guid.NewGuid().ToString());
+                var downloadRoot = Path.Combine(Path.GetTempPath(), "shift-" + Guid.NewGuid().ToString());
                 Manifest manifest = await _manifestProcessingService.GetManifestAsync(manifestPath);
 
                 // Copy manifest to download root
                 Directory.CreateDirectory(downloadRoot);
                 File.Copy(manifestPath, Path.Combine(downloadRoot, "manifest.json"));
 
-                // Copy self (mrshift) to download root
-                File.Copy(Process.GetCurrentProcess().MainModule.FileName, Path.Combine(downloadRoot, "mrshift.exe"), true);
+                // Copy self (shift) to download root
+                string targetDir = Path.Combine(downloadRoot, "shift");
+                Directory.CreateDirectory(targetDir);
+
+                string sourceDir = Directory.GetParent(Process.GetCurrentProcess().MainModule.FileName).FullName;
+                foreach (var file in Directory.GetFiles(sourceDir))
+                {
+                    File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
+                }
 
                 // Download all the components into the download root
                 var downloadTasks = new List<Task>();
