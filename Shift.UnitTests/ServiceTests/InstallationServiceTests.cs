@@ -101,7 +101,7 @@ namespace Shift.UnitTests.ServiceTests
         public async Task InstallationService_InitReleaseAsync_CanExecuteTest()
         {
             // arrange
-            var path = "../manifest.json";
+            var path = "manifest.json";
 
             var installationService = new InstallationService(
                 _componentService.Object,
