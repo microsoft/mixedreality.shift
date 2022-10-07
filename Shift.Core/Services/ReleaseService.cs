@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
+using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -78,7 +79,7 @@ namespace Shift.Core.Services
                 string targetDir = Path.Combine(downloadRoot, "shift");
                 Directory.CreateDirectory(targetDir);
 
-                string sourceDir = Directory.GetParent(Process.GetCurrentProcess().MainModule.FileName).FullName;
+                string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 foreach (var file in Directory.GetFiles(sourceDir))
                 {
                     File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
