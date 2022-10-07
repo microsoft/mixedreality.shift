@@ -142,7 +142,7 @@ namespace Shift.Core.Services
             {
                 _logger.LogInformation("Starting the set up process...");
 
-                Manifest manifest = await _manifestService.GetManifestAsync("../manifest.json");
+                Manifest manifest = await _manifestService.GetManifestAsync("manifest.json");
 
                 resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest);
 
