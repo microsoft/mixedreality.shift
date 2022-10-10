@@ -79,7 +79,7 @@ namespace Shift.Core.Services
                 string targetDir = Path.Combine(downloadRoot, "shift");
                 Directory.CreateDirectory(targetDir);
 
-                string sourceDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string sourceDir = AppContext.BaseDirectory;
                 foreach (var file in Directory.GetFiles(sourceDir))
                 {
                     File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
