@@ -37,8 +37,9 @@ namespace Shift.Cli
                 return 0;
             }
 
+            string programPath = AppContext.BaseDirectory;
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(System.IO.Path.GetDirectoryName(Environment.ProcessPath))
+                .SetBasePath(programPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
@@ -57,9 +58,10 @@ namespace Shift.Cli
                         host =>
                         {
                             host
+                                .UseContentRoot(programPath)
                                 .ConfigureAppConfiguration((context, builder) =>
                                 {
-                                    builder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                                    builder.AddConfiguration(configuration);
                                 })
                                 .ConfigureServices((context, services) =>
                                 {
