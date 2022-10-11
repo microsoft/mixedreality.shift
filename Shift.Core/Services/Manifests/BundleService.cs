@@ -83,15 +83,14 @@ namespace Shift.Core.Services.Manifests
             return await ProcessBundleAsync(manifest, "default");
         }
 
-        public async Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(Manifest manifest)
+        public async Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(Manifest manifest, string programPath)
         {
             var components = _manifestService.GetDefaultComponents(manifest);
-            var workingDir = Directory.GetCurrentDirectory();
 
             // For each component, perform the associated task
             foreach (var component in components)
             {
-                var componentLocation = Path.Join(Directory.GetParent(workingDir).FullName, component.Id);
+                var componentLocation = Path.Join(programPath, component.Id);
                 if (typeof(PackageLocation).IsInstanceOfType(component.Location))
                 {
                     componentLocation = Path.Join(componentLocation, ((PackageLocation)component.Location).Version);

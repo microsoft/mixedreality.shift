@@ -6,6 +6,7 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Models.Common;
@@ -142,9 +143,10 @@ namespace Shift.Core.Services
             {
                 _logger.LogInformation("Starting the set up process...");
 
-                Manifest manifest = await _manifestService.GetManifestAsync("manifest.json");
+                string programPath = Directory.GetParent(AppContext.BaseDirectory).FullName;
+                Manifest manifest = await _manifestService.GetManifestAsync(Path.Combine(programPath, "manifest.json"));
 
-                resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest);
+                resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest, programPath);
 
                 _logger.LogInformation("Initialization complete.");
 
