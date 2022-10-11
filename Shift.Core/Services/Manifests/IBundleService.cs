@@ -66,6 +66,7 @@ namespace Shift.Core.Services.Manifests
         /// release image
         /// </summary>
         /// <param name="manifest">Manifest object</param>
-        Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(Manifest manifest);
+        /// <param name="programPath">Path to the current working directory</param>
+        Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(Manifest manifest, string programPath);
     }
 }

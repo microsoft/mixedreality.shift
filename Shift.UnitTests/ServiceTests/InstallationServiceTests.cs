@@ -115,11 +115,12 @@ namespace Shift.UnitTests.ServiceTests
             // assert
             _manifestService
                 .Verify(x => x.GetManifestAsync(
-                    It.Is<string>(x => x == path)),
+                    It.IsAny<string>()),
                     Times.Once);
             _bundleService
                 .Verify(x => x.ProcessDefaultBundleFromReleaseAsync(
-                    It.IsAny<Manifest>()),
+                    It.IsAny<Manifest>(),
+                    It.IsAny<string>()),
                     Times.Once());
         }
     }
