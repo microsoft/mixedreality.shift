@@ -23,7 +23,7 @@ jobs:
       run: dotnet build --no-restore
     
     - name: Publish CLI
-      run: dotnet publish ${{ env.GITHUB_WORKSPACE }}Shift.Cli/Shift.Cli.csproj -c Release -o ${{ env.GITHUB_WORKSPACE }}bins/
+      run: dotnet publish $GITHUB_WORKSPACE/Shift.Cli/Shift.Cli.csproj -c Release -o $GITHUB_WORKSPACE/bins/
 
     - name: Running Tests
-      run: dotnet test --no-build --verbosity normal -- MSTest.SHIFT_PATH=${{ env.GITHUB_WORKSPACE }}bins/
+      run: dotnet test --no-build --verbosity normal -- MSTest.SHIFT_PATH=$GITHUB_WORKSPACE/bins/
