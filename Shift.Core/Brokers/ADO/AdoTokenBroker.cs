@@ -22,9 +22,9 @@ namespace Shift.Core.Brokers
         /// <summary>
         /// Initializes the access token
         /// </summary>
-        /// <param name="organization">Organization, default to Microsoft</param>
+        /// <param name="organization">The organization to authenticate to, eg: FABRIKAM.</param>
         /// <param name="logger">Logger to use</param>
-        public async Task<string> GetTokenCredentialAsync(string organization = "microsoft")
+        public async Task<string> GetTokenCredentialAsync(string organization )
         {
             organization = organization.ToUpperInvariant();
             if (_cache.TryGetValue(organization, out string pat))

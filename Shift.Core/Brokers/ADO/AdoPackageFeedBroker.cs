@@ -28,8 +28,6 @@ namespace Shift.Core.Brokers
 
         private const string ResourceAreaId = "3fda18ba-dff2-42e6-8d10-c521b23b85fc";
 
-        private readonly string _artifactToolLocation;
-
         private readonly VssBasicCredential _collectionCredentials;
 
         private readonly string _collectionPat;
@@ -42,14 +40,11 @@ namespace Shift.Core.Brokers
         /// <param name="collectionPat">The collection personal access token.</param>
         /// <param name="collectionUri">The collection URI.</param>
         /// <param name="projectName">The collection project name.</param>
-        public AdoPackageFeedBroker(
-            IAdoTokenBroker tokenBroker,
-            ILogger<AdoPackageFeedBroker> logger)
+        public AdoPackageFeedBroker(ILogger<AdoPackageFeedBroker> logger, string pat, string collectionUri, string projectName)
         {
-            _collectionPat = tokenBroker.GetTokenCredentialAsync().Result;
+            _collectionPat = pat;
             _collectionCredentials = new VssBasicCredential(string.Empty, _collectionPat);
             _logger = logger;
-            _artifactToolLocation = InstallArtifactToolAsync(organization: "https://microsoft.visualstudio.com/").Result;
         }
 
         /// <summary>
@@ -72,6 +67,8 @@ namespace Shift.Core.Brokers
             string downloadPath,
             string projectName = default)
         {
+            var _artifactToolLocation = await InstallArtifactToolAsync(organization);
+
             var startInfo = new ProcessStartInfo
             {
                 FileName = Path.Combine(_artifactToolLocation, "artifacttool.exe"),

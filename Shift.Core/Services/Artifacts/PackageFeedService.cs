@@ -4,12 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Shift.Core.Brokers;
 using Shift.Core.Models.Artifacts;
+using Shift.Core.Providers;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Shift.Core.Services.Artifacts
 {
@@ -19,18 +20,20 @@ namespace Shift.Core.Services.Artifacts
     public class PackageFeedService : IPackageFeedService
     {
         private readonly IMemoryCache _cache;
-
-        private readonly IPackageFeedBroker _packageFeedBroker;
+        private readonly IAdoTokenBroker _tokenBroker;
+        private readonly IPackageFeedBrokerFactory _packageFeedBrokerFactory;
 
         /// <summary>
         /// Initializes static members of the <see cref="PackageFeedService"/> class.
         /// </summary>
         public PackageFeedService(
             IMemoryCache cache,
-            IPackageFeedBroker packageFeedBroker)
+            IAdoTokenBroker tokenBroker,
+            IPackageFeedBrokerFactory packageFeedBrokerFactory)
         {
             _cache = cache;
-            _packageFeedBroker = packageFeedBroker;
+            _tokenBroker = tokenBroker;
+            _packageFeedBrokerFactory = packageFeedBrokerFactory;
         }
 
         public async Task DownloadArtifactAsync(
@@ -39,9 +42,12 @@ namespace Shift.Core.Services.Artifacts
             string package,
             string project,
             string version,
-            string organization = "microsoft")
+            string organization)
         {
-            await _packageFeedBroker.DownloadPackageAsync(
+            var token = await _tokenBroker.GetTokenCredentialAsync();
+            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(organization, project, token);
+
+            await packageFeedBroker.DownloadPackageAsync(
                 packageName: package,
                 feedName: feed,
                 organization: organization,
@@ -77,11 +83,14 @@ namespace Shift.Core.Services.Artifacts
             string feedName,
             string packageName)
         {
+            var token = await _tokenBroker.GetTokenCredentialAsync();
+            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(collectionUri, projectName, token);
+
             // Check if versions exist in cache
             var key = $"{feedName}-{packageName}";
             var versions = await _cache.GetOrCreateAsync(key, async (entry) =>
             {
-                var versions = await _packageFeedBroker.GetPackageVersionsAsync(
+                var versions = await packageFeedBroker.GetPackageVersionsAsync(
                     feedName,
                     packageName,
                     collectionUri,

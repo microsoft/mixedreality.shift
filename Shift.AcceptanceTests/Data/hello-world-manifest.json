@@ -1,0 +1,26 @@
+﻿{
+  "Bundles": [
+    {
+      "Components": [
+        "hello-world"
+      ],
+      "Description": "Creates a text file containing 'Hello, World.'",
+      "Id": "default"
+    }
+  ],
+  "Components": [
+    {
+      "Description": "Initial windows companion component for platform library hosting inProc",
+      "DeviceDemands": [],
+      "Id": "hello-world",
+      "Location": null,
+      "Owner": "shift",
+      "Task": {
+        "Script": "echo Hello, World > hello-world.txt",
+        "Elevate": true,
+        "Type": "pwsh"
+      }
+    }
+  ],
+  "Version": "0.1"
+}
