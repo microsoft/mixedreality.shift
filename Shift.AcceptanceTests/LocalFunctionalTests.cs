@@ -14,7 +14,7 @@ namespace Shift.Cli.AcceptanceTests
 {
     /// <summary>
     /// These tests are intended to run against a built version of shift; it is expected that the machine running these tests
-    /// has basic access to internet, etc. The "SHIFT_PATH" variable must be set in default.runsettings before this test is executed. 
+    /// has basic access to internet, etc. The "SHIFT_PATH" variable must be set in default.runsettings before this test is executed.
     /// </summary>
     [TestClass]
     [TestCategory("LOCAL-TESTS")]
@@ -25,7 +25,7 @@ namespace Shift.Cli.AcceptanceTests
         [ClassInitialize]
         public static void SetupTests(TestContext testContext)
         {
-            _filepath = testContext.Properties["SHIFT_PATH"].ToString();
+            _filepath = Environment.GetEnvironmentVariable("SHIFT_PATH") ?? testContext.Properties["SHIFT_PATH"].ToString();
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace Shift.Cli.AcceptanceTests
         public async Task Shift_CanCreateRelease_WithHelloWorldSample()
         {
             // arrange
-            var outputPath = Path.GetTempFileName() +".zip";
+            var outputPath = Path.GetTempFileName() + ".zip";
             var process = CreateProcess($"create-release --manifest-path \"./Data/hello-world-manifest.json\" --output-path \"{outputPath}\"");
 
             // act
