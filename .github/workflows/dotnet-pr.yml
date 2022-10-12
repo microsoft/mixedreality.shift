@@ -27,5 +27,5 @@ jobs:
 
     - name: Running Tests
       env: 
-        SHIFT_PATH: ${{ github.workspace }}/bins/
+        SHIFT_PATH: ${{ github.workspace }}/bins/shift.exe
       run: dotnet test --no-build --verbosity normal
