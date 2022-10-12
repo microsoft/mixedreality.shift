@@ -21,6 +21,11 @@ jobs:
 
     - name: Building Project(s)
       run: dotnet build --no-restore
+    
+    - name: Publish CLI
+      run: dotnet publish ${{ github.workspace }}/Shift.Cli/Shift.Cli.csproj -c Release -o ${{ github.workspace }}/bins/
 
     - name: Running Tests
+      env: 
+        SHIFT_PATH: ${{ github.workspace }}/bins/shift.exe
       run: dotnet test --no-build --verbosity normal

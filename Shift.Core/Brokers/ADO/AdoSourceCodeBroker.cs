@@ -28,11 +28,9 @@ namespace Shift.Core.Brokers
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoSourceCodeBroker"/> class.
         /// </summary>
-        public AdoSourceCodeBroker(
-            IAdoTokenBroker tokenBroker,
-            ILogger<AdoSourceCodeBroker> logger)
+        public AdoSourceCodeBroker(ILogger<AdoSourceCodeBroker> logger, string pat, string collectionUri, string projectNamer)
         {
-            _collectionPat = tokenBroker.GetTokenCredentialAsync().Result;
+            _collectionPat = pat;
             _collectionCredentials = new VssBasicCredential(string.Empty, _collectionPat);
             _logger = logger;
         }

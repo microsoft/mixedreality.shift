@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".pipelines", ".pipelines", 
 		.github\workflows\dotnet-prerelease.yml = .github\workflows\dotnet-prerelease.yml
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shift.AcceptanceTests", "Shift.AcceptanceTests\Shift.AcceptanceTests.csproj", "{1FC9C412-D0CC-4476-A77C-F6F79C52079E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9346E765-BD33-4FED-88B4-11D28A53D1B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FC9C412-D0CC-4476-A77C-F6F79C52079E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FC9C412-D0CC-4476-A77C-F6F79C52079E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FC9C412-D0CC-4476-A77C-F6F79C52079E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FC9C412-D0CC-4476-A77C-F6F79C52079E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

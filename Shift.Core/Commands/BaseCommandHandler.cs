@@ -38,8 +38,6 @@ namespace Shift.Core.Commands
             CancellationToken cancellationToken = default)
         {
             Logger.LogTrace($"Start_{GetType().Name}");
-            Logger.LogInformation("Program written and managed by MR-ApES-InnerLoop. " +
-                "Please reach out to apesidt@microsoft.com for any inquiries.");
 
             var result = ShiftResultCode.Unknown;
             try

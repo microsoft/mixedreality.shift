@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<TestRunParameters>
+		<!-- below should be updated programatically to user's publish target-->
+		<Parameter name="SHIFT_PATH" value="D:\Repos\shift\Shift.Cli\bin\Debug\net6.0\win-x64\shift.exe" />
+	</TestRunParameters>
+</RunSettings>

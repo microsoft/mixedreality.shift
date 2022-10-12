@@ -6,6 +6,7 @@
 
 using System.Collections.Generic;
 using System.CommandLine;
+using Microsoft.Internal.MR.ES.Shift.Cli.Commands;
 using Shift.Core.Models.Plugins;
 
 namespace Shift.Cli.Commands
@@ -15,36 +16,16 @@ namespace Shift.Cli.Commands
         public ProgramRootCommand(IEnumerable<PluginDefinition> plugins)
         {
             AddGlobalOption(new Option<string>(
-                aliases: new[] { "--adoPat" },
-                description: "The personal access token used to access ADO")
-            );
-
-            AddGlobalOption(new Option<string>(
-                aliases: new[] { "--adoUri" },
-                getDefaultValue: () => "https://microsoft.visualstudio.com",
-                description: "The ADO root uri, eg: https://microsoft.visualstudio.com")
-            );
-
-            AddGlobalOption(new Option<string>(
-                aliases: new[] { "--adoProject" },
-                getDefaultValue: () => "Analog",
-                description: "The ADO project, eg: Analog")
-            );
-
-            AddGlobalOption(new Option<string>(
                 aliases: new[] { "--workingDir" },
                 getDefaultValue: () => "%LocalAppData%\\MRShift",
                 description: "Working directory to store all the downloaded artifacts.")
             );
 
-            AddGlobalOption(new Option<string>(
-                aliases: new[] { "--manifest" },
-                description: "The local manifest file to use.")
-            );
-
             AddCommand(new InitCommand());
             AddCommand(new InstallCommand());
             AddCommand(new DownloadCommand());
+            AddCommand(new VersionCommand());
+            AddCommand(new CreateReleaseCommand());
 
             foreach (var p in plugins)
             {

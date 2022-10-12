@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,14 @@ namespace Microsoft.Internal.MR.ES.Shift.Cli.Commands
 
         protected override async Task<ShiftResultCode> ExecuteAsyncOverride(CreateReleaseCommandHandlerInput input, CancellationToken cancellationToken)
         {
-            return await _releaseService.CreateReleaseAsync(input.ManifestPath, input.OutputPath);
+            var result = await _releaseService.CreateReleaseAsync(input.ManifestPath, input.OutputPath);
+
+            if (result == ShiftResultCode.Success)
+            {
+                Console.WriteLine(input.OutputPath);
+            }
+
+            return result;
         }
     }
 }
