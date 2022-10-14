@@ -15,6 +15,7 @@ using Shift.Core.Models.Artifacts;
 using Shift.Core.Models.Common;
 using Shift.Core.Models.Events;
 using Shift.Core.Models.Manifests;
+using Shift.Core.Providers;
 using Shift.Core.Services.Artifacts;
 using Shift.Core.Services.Serialization;
 
@@ -28,20 +29,20 @@ namespace Shift.Core.Services.Manifests
         private readonly ILogger<PromotionService> _logger;
         private readonly IManifestService _manifestProcessingService;
         private readonly IPackageFeedService _packageFeedService;
-        private readonly ISourceCodeBroker _sourceCodeBroker;
+        private readonly ISourceCodeBrokerFactory _sourceCodeBrokerFactory;
         private readonly IAdoTokenBroker _tokenBroker;
 
         public PromotionService(
             IManifestService manifestProcessingService,
             IPackageFeedService packageFeedService,
-            ISourceCodeBroker sourceCodeBroker,
+            ISourceCodeBrokerFactory sourceCodeBrokerFactory,
             IAdoTokenBroker tokenBroker,
             ILogger<PromotionService> logger
             )
         {
             _manifestProcessingService = manifestProcessingService;
             _packageFeedService = packageFeedService;
-            _sourceCodeBroker = sourceCodeBroker;
+            _sourceCodeBrokerFactory = sourceCodeBrokerFactory;
             _tokenBroker = tokenBroker;
             _logger = logger;
         }
@@ -64,8 +65,9 @@ namespace Shift.Core.Services.Manifests
             try
             {
                 // Download and cast the manifest file from the target repository into the manifest object
-                var manifestBytes = await _sourceCodeBroker.DownloadFileAsync(adoUri, adoProject, targetRepo, targetBranch, targetManifestPath);
-                var promotionCriteriaBytes = await _sourceCodeBroker.DownloadFileAsync(adoUri, adoProject, targetRepo, targetBranch, targetPromoCriteriaPath);
+                var sourceCodeBroker = _sourceCodeBrokerFactory.CreateSourceCodeBroker(adoUri, adoProject, adoPat);
+                var manifestBytes = await sourceCodeBroker.DownloadFileAsync(adoUri, adoProject, targetRepo, targetBranch, targetManifestPath);
+                var promotionCriteriaBytes = await sourceCodeBroker.DownloadFileAsync(adoUri, adoProject, targetRepo, targetBranch, targetPromoCriteriaPath);
                 var promotionCriteria = _manifestProcessingService.ConvertBytesToManifestPromotionCriteria(promotionCriteriaBytes);
                 var targetManifest = _manifestProcessingService.ConvertBytesToManifest(manifestBytes);
 
@@ -121,7 +123,7 @@ namespace Shift.Core.Services.Manifests
                     var intermediateBranch = $"automated/promote-{targetBranch}-{Guid.NewGuid().ToString().Substring(0, 8)}";
 
                     // Create a new branch off our target branch with the intended change
-                    await _sourceCodeBroker.CreatePushAsync(
+                    await sourceCodeBroker.CreatePushAsync(
                         organization: adoUri,
                         projectName: adoProject,
                         repositoryName: targetRepo,
@@ -132,7 +134,7 @@ namespace Shift.Core.Services.Manifests
                         );
 
                     // Create PR to merge back into target branch
-                    await _sourceCodeBroker.CreatePullRequestAsync(
+                    await sourceCodeBroker.CreatePullRequestAsync(
                         organization: adoUri,
                         projectName: adoProject,
                         repositoryName: targetRepo,
