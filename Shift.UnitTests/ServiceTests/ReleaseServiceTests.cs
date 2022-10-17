@@ -20,6 +20,7 @@ namespace Shift.UnitTests.ServiceTests
     {
         private Mock<IComponentService> _componentService;
         private Mock<IConfiguration> _configuration;
+        private Mock<IBundleService> _bundleService;
         private Mock<IManifestService> _manifestService;
         private Mock<IPackageFeedService> _packageFeedService;
 
@@ -46,6 +47,7 @@ namespace Shift.UnitTests.ServiceTests
                 }
                 });
             _configuration = new Mock<IConfiguration>();
+            _bundleService = new Mock<IBundleService>();
         }
 
         [TestMethod]
@@ -56,6 +58,7 @@ namespace Shift.UnitTests.ServiceTests
                 _componentService.Object,
                 _manifestService.Object,
                 _packageFeedService.Object,
+                _bundleService.Object,
                 _configuration.Object,
                 NullLogger<ReleaseService>.Instance);
 
@@ -75,6 +78,36 @@ namespace Shift.UnitTests.ServiceTests
                     It.IsAny<string>(),
                     It.IsAny<string>()),
                     Times.Exactly(2));
+        }
+
+
+        [TestMethod]
+        public async Task ReleaseService_InitReleaseAsync_CanExecuteTest()
+        {
+            // arrange
+            var path = "manifest.json";
+
+            var releaseService = new ReleaseService(
+                 _componentService.Object,
+                 _manifestService.Object,
+                 _packageFeedService.Object,
+                 _bundleService.Object,
+                 _configuration.Object,
+                 NullLogger<ReleaseService>.Instance);
+
+            // act
+            await releaseService.InitReleaseAsync();
+
+            // assert
+            _manifestService
+                .Verify(x => x.GetManifestAsync(
+                    It.IsAny<string>()),
+                    Times.Once);
+            _bundleService
+                .Verify(x => x.ProcessDefaultBundleFromReleaseAsync(
+                    It.IsAny<Manifest>(),
+                    It.IsAny<string>()),
+                    Times.Once());
         }
     }
 }

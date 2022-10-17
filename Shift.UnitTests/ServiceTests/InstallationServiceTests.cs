@@ -96,32 +96,5 @@ namespace Shift.UnitTests.ServiceTests
                     It.IsAny<Manifest>()),
                     Times.Once());
         }
-
-        [TestMethod]
-        public async Task InstallationService_InitReleaseAsync_CanExecuteTest()
-        {
-            // arrange
-            var path = "manifest.json";
-
-            var installationService = new InstallationService(
-                _componentService.Object,
-                _bundleService.Object,
-                _manifestService.Object,
-                NullLogger<InstallationService>.Instance);
-
-            // act
-            await installationService.InitReleaseAsync();
-
-            // assert
-            _manifestService
-                .Verify(x => x.GetManifestAsync(
-                    It.IsAny<string>()),
-                    Times.Once);
-            _bundleService
-                .Verify(x => x.ProcessDefaultBundleFromReleaseAsync(
-                    It.IsAny<Manifest>(),
-                    It.IsAny<string>()),
-                    Times.Once());
-        }
     }
 }
