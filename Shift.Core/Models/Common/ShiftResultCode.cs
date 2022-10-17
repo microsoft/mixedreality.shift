@@ -29,5 +29,6 @@ namespace Shift.Core.Models.Common
         UpdateNotRequired = 14,
         UpdateCancelled = 15,
         CommandExecutionError = 16,
+        ManifestNotFound = 17,
     }
 }

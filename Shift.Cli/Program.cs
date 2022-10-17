@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Shift.Cli.Commands;
+using Shift.Core;
 using Shift.Core.Brokers;
 using Shift.Core.Brokers.Executable;
 using Shift.Core.Models.Plugins;
@@ -31,7 +32,7 @@ namespace Shift.Cli
     {
         public static int Main(string[] args)
         {
-            string programPath = AppContext.BaseDirectory;
+            string programPath = ProgramDataPath.GetProgramRunningDirectory();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(programPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

@@ -30,7 +30,7 @@ namespace Shift.Core.Services.Manifests
 
             try
             {
-                downloadRoot ??= ProgramDataPath.GetRootPath();
+                downloadRoot ??= ProgramDataPath.GetProgramDataRootPath();
                 string downloadDir = string.Empty;
                 if (component.Location is PackageLocation packageLocation)
                 {

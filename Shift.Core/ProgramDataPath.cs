@@ -1,4 +1,4 @@
-﻿// -----------------------------------------------------------------------
+﻿// ---------------------------------------------------------------Path.GetDirectoryName(AppContext.BaseDirectory);--------
 // <copyright company="Microsoft">
 //     Copyright (c) Microsoft. All rights reserved.
 // </copyright>
@@ -18,13 +18,18 @@ namespace Shift.Core
             return Path.Combine(rootPath, packageName, feedName, version) + "\\";
         }
 
-        public static string GetRootPath()
+        public static string GetProgramDataRootPath()
         {
             if (!Directory.Exists(rootPath))
             {
                 Directory.CreateDirectory(rootPath);
             }
             return rootPath;
+        }
+
+        public static string GetProgramRunningDirectory()
+        {
+            return AppContext.BaseDirectory;
         }
     }
 }
