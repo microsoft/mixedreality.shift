@@ -40,13 +40,6 @@ namespace Shift.Core.Services
         Task<ShiftResultCode> InitLocalAsync(string manifestPath);
 
         /// <summary>
-        /// This command is intended to run inside a release package. A release package is a
-        /// compilation of all the bundle components, the manfest file, and the mrshift executable.
-        /// </summary>
-        /// <returns>Shift result code</returns>
-        Task<ShiftResultCode> InitReleaseAsync();
-
-        /// <summary>
         /// Installs the components in the given bundle
         /// </summary>
         /// <param name="bundle">Bundle name</param>

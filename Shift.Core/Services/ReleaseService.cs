@@ -30,20 +30,23 @@ namespace Shift.Core.Services
         private readonly IComponentService _componentInstallationService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<ReleaseService> _logger;
-        private readonly IManifestService _manifestProcessingService;
+        private readonly IManifestService _manifestService;
         private readonly IPackageFeedService _packageFeedService;
+        private readonly IBundleService _bundleService;
 
         public ReleaseService(
             IComponentService componentInstallationService,
             IManifestService manifestProcessingService,
             IPackageFeedService packageFeedService,
+            IBundleService bundleService,
             IConfiguration configuration,
             ILogger<ReleaseService> logger
             )
         {
             _componentInstallationService = componentInstallationService;
-            _manifestProcessingService = manifestProcessingService;
+            _manifestService = manifestProcessingService;
             _packageFeedService = packageFeedService;
+            _bundleService = bundleService;
             _configuration = configuration;
             _logger = logger;
         }
@@ -69,7 +72,7 @@ namespace Shift.Core.Services
                 }
 
                 var downloadRoot = Path.Combine(Path.GetTempPath(), "shift-" + Guid.NewGuid().ToString());
-                Manifest manifest = await _manifestProcessingService.GetManifestAsync(manifestPath);
+                Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
 
                 // Copy manifest to download root
                 Directory.CreateDirectory(downloadRoot);
@@ -79,7 +82,7 @@ namespace Shift.Core.Services
                 string targetDir = Path.Combine(downloadRoot, "shift");
                 Directory.CreateDirectory(targetDir);
 
-                string sourceDir = AppContext.BaseDirectory;
+                string sourceDir = ProgramDataPath.GetProgramRunningDirectory();
                 foreach (var file in Directory.GetFiles(sourceDir))
                 {
                     File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
@@ -120,6 +123,75 @@ namespace Shift.Core.Services
                     exception,
                     LogEventSerialization.FormatState);
             }
+        }
+
+        public async Task<ShiftResultCode> InitReleaseAsync()
+        {
+            var telemetryEvent = new InitEvent();
+            var stopwatch = Stopwatch.StartNew();
+            Exception exception = null;
+            ShiftResultCode resultCode = ShiftResultCode.Unknown;
+
+            try
+            {
+                _logger.LogInformation("Starting the set up process...");
+
+                string manifestPath = FindManifestPath();
+                Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
+
+                string releaseDirectory = new DirectoryInfo(ProgramDataPath.GetProgramRunningDirectory()).Parent.FullName;
+                resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest, releaseDirectory);
+
+                _logger.LogInformation("Initialization complete.");
+
+                return resultCode;
+            }
+            catch (ShiftException ex)
+            {
+                telemetryEvent.ExceptionOcurred = true;
+                telemetryEvent.ResultCode = ex.ResultCode.ToString();
+                exception = ex;
+                throw;
+            }
+            finally
+            {
+                telemetryEvent.DurationMS = stopwatch.ElapsedMilliseconds;
+                telemetryEvent.ResultCode = resultCode.ToString();
+
+                _logger.Log(telemetryEvent.ExceptionOcurred ?
+                    LogLevel.Critical : LogLevel.Information,
+                    new EventId(),
+                    telemetryEvent,
+                    exception,
+                    LogEventSerialization.FormatState);
+            }
+        }
+
+        private string FindManifestPath()
+        {
+            string manifestFileName = "manifest.json";
+            string programPath = ProgramDataPath.GetProgramRunningDirectory();
+
+            string manifestPath = Path.Combine(programPath, manifestFileName);
+            if (File.Exists(manifestPath))
+            {
+                return manifestPath;
+            }
+
+            manifestPath = Path.Combine(new DirectoryInfo(programPath).Parent.FullName, manifestFileName);
+            if (File.Exists(manifestPath))
+            {
+                return manifestPath;
+            }
+
+            manifestPath = Path.Combine(ProgramDataPath.GetProgramDataRootPath(), manifestPath);
+            if (File.Exists(manifestPath))
+            {
+                return manifestPath;
+            }
+
+            throw new ShiftException(ShiftResultCode.ManifestNotFound, 
+                message: $"Cannot find manifest file under working directory {programPath}");
         }
     }
 }

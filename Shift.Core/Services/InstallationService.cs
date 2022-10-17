@@ -132,47 +132,6 @@ namespace Shift.Core.Services
             }
         }
 
-        public async Task<ShiftResultCode> InitReleaseAsync()
-        {
-            var telemetryEvent = new InitEvent();
-            var stopwatch = Stopwatch.StartNew();
-            Exception exception = null;
-            ShiftResultCode resultCode = ShiftResultCode.Unknown;
-
-            try
-            {
-                _logger.LogInformation("Starting the set up process...");
-
-                string programPath = Path.GetDirectoryName(AppContext.BaseDirectory);
-                Manifest manifest = await _manifestService.GetManifestAsync(Path.Combine(programPath, "manifest.json"));
-
-                resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest, programPath);
-
-                _logger.LogInformation("Initialization complete.");
-
-                return resultCode;
-            }
-            catch (ShiftException ex)
-            {
-                telemetryEvent.ExceptionOcurred = true;
-                telemetryEvent.ResultCode = ex.ResultCode.ToString();
-                exception = ex;
-                throw;
-            }
-            finally
-            {
-                telemetryEvent.DurationMS = stopwatch.ElapsedMilliseconds;
-                telemetryEvent.ResultCode = resultCode.ToString();
-
-                _logger.Log(telemetryEvent.ExceptionOcurred ?
-                    LogLevel.Critical : LogLevel.Information,
-                    new EventId(),
-                    telemetryEvent,
-                    exception,
-                    LogEventSerialization.FormatState);
-            }
-        }
-
         public async Task<ShiftResultCode> InstallBundleAsync(
             string bundle,
             string packageName,

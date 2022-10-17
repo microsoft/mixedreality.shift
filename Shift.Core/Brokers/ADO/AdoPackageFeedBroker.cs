@@ -252,7 +252,7 @@ namespace Shift.Core.Brokers
                 distroName,
                 distroVersion);
 
-            var extractPath = path ?? Path.Combine(ProgramDataPath.GetRootPath(), ArtifactToolName, toolInfo.Version);
+            var extractPath = path ?? Path.Combine(ProgramDataPath.GetProgramDataRootPath(), ArtifactToolName, toolInfo.Version);
 
             // for install is not set, and path exists, we assume tool is installed
             if (Directory.Exists(extractPath) && !forceInstall)

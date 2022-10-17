@@ -77,7 +77,7 @@ namespace Shift.Core.Services.Manifests
 
         private string GetComponentDownloadLocation(Component component)
         {
-            var downloadRoot = ProgramDataPath.GetRootPath();
+            var downloadRoot = ProgramDataPath.GetProgramDataRootPath();
             string downloadDir = string.Empty;
 
             if (component.Location is PackageLocation packageLocation)

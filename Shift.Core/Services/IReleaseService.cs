@@ -17,5 +17,12 @@ namespace Shift.Core.Services
         /// <param name="manifestPath">The path to the manifest.</param>
         /// <param name="outputPath">The path to the output zip.</param>
         Task<ShiftResultCode> CreateReleaseAsync(string manifestPath, string outputPath);
+
+        /// <summary>
+        /// This command is intended to run inside a release package. A release package is a
+        /// compilation of all the bundle components, the manfest file, and the mrshift executable.
+        /// </summary>
+        /// <returns>Shift result code</returns>
+        Task<ShiftResultCode> InitReleaseAsync();
     }
 }
