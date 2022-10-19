@@ -44,7 +44,7 @@ namespace Shift.Core.Services.Artifacts
             string version,
             string organization)
         {
-            var token = await _tokenBroker.GetTokenCredentialAsync();
+            var token = await _tokenBroker.GetTokenCredentialAsync(organization);
             var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(organization, project, token);
 
             await packageFeedBroker.DownloadPackageAsync(
@@ -83,7 +83,8 @@ namespace Shift.Core.Services.Artifacts
             string feedName,
             string packageName)
         {
-            var token = await _tokenBroker.GetTokenCredentialAsync();
+            // this access pattern can fail, collectionUri is sometimes FQDN and at othe times an ADO name
+            var token = await _tokenBroker.GetTokenCredentialAsync(collectionUri);
             var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(collectionUri, projectName, token);
 
             // Check if versions exist in cache

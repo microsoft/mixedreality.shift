@@ -31,7 +31,7 @@ namespace Shift.Core.Services.Artifacts
             string package,
             string project,
             string version,
-            string organization = "microsoft");
+            string organization);
 
         /// <summary>
         /// Gets the latest package version

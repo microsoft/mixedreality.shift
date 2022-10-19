@@ -71,7 +71,7 @@ namespace Shift.Core.Services.Manifests
 
             if (AdoPackageFeedBroker.IsVersionGreater(version, curVersion))
             {
-                await _packageFeedService.DownloadArtifactAsync(downloadRoot, feed, packageName, project, version);
+                await _packageFeedService.DownloadArtifactAsync(downloadRoot, feed, packageName, project, version, organization);
             }
 
             var manifest = await GetManifestAsync(manifestPath);
