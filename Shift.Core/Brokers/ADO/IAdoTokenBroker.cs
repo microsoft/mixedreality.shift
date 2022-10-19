@@ -10,6 +10,6 @@ namespace Shift.Core.Brokers
 {
     public interface IAdoTokenBroker
     {
-        Task<string> GetTokenCredentialAsync(string tenantId = "microsoft");
+        Task<string> GetTokenCredentialAsync(string tenantId);
     }
 }
