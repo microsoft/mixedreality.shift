@@ -13,7 +13,7 @@ namespace Shift.UnitTests.BrokerTests
     [TestClass]
     public class AdoPackageFeedBrokerTests
     {
-        [TestMethod]
+        //[TestMethod]
         public async Task AdoPackageFeedBroker_InstallArtifactToolLockingTest()
         {
             var organization = "microsoft";
@@ -24,13 +24,13 @@ namespace Shift.UnitTests.BrokerTests
                 collectionUri: organization,
                 projectName: "testProject");
 
-            string artifactToolLocation = string.Empty;
+            var tasks = new List<Task>();
             for (int i = 0; i < 30; i++)
             {
-                artifactToolLocation = await adoPackageFeedBroker.InstallArtifactToolAsync(organization);
+                tasks.Add(adoPackageFeedBroker.InstallArtifactToolAsync(organization));
             }
 
-            Assert.AreNotEqual(artifactToolLocation, string.Empty);
+            await Task.WhenAll(tasks);
         }
     }
 }
