@@ -10,7 +10,7 @@ using Shift.Core.Brokers;
 
 namespace Shift.UnitTests.BrokerTests
 {
-    [TestClass]
+    //[TestClass]
     public class AdoPackageFeedBrokerTests
     {
         [TestMethod]
@@ -24,13 +24,18 @@ namespace Shift.UnitTests.BrokerTests
                 collectionUri: organization,
                 projectName: "testProject");
 
-            string artifactToolLocation = string.Empty;
+            var tasks = new List<Task<string>>();
             for (int i = 0; i < 30; i++)
             {
-                artifactToolLocation = await adoPackageFeedBroker.InstallArtifactToolAsync(organization);
+                tasks.Add(adoPackageFeedBroker.InstallArtifactToolAsync(organization));
             }
 
-            Assert.AreNotEqual(artifactToolLocation, string.Empty);
+            await Task.WhenAll(tasks);
+
+            foreach (var task in tasks)
+            {
+                Assert.AreNotEqual(task.Result, string.Empty);
+            }
         }
     }
 }
