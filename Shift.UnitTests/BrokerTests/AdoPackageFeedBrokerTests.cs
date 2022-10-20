@@ -13,7 +13,7 @@ namespace Shift.UnitTests.BrokerTests
     //[TestClass]
     public class AdoPackageFeedBrokerTests
     {
-        [TestMethod]
+        //[TestMethod]
         public async Task AdoPackageFeedBroker_InstallArtifactToolLockingTest()
         {
             var organization = "microsoft";
@@ -23,7 +23,6 @@ namespace Shift.UnitTests.BrokerTests
                 pat: pat,
                 collectionUri: organization,
                 projectName: "testProject");
-
             var tasks = new List<Task<string>>();
             for (int i = 0; i < 30; i++)
             {
