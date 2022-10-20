@@ -34,6 +34,8 @@ namespace Shift.Core.Brokers
 
         private readonly ILogger<AdoPackageFeedBroker> _logger;
 
+        private readonly object _installArtifactToolLock = new object();
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoPackageFeedBroker"/> class.
         /// </summary>
@@ -224,7 +226,7 @@ namespace Shift.Core.Brokers
             return osName;
         }
 
-        private async Task<string> InstallArtifactToolAsync(
+        public async Task<string> InstallArtifactToolAsync(
             string organization,
             string path = default,
             bool forceInstall = false)
@@ -254,36 +256,37 @@ namespace Shift.Core.Brokers
 
             var extractPath = path ?? Path.Combine(ProgramDataPath.GetProgramDataRootPath(), ArtifactToolName, toolInfo.Version);
 
-            // for install is not set, and path exists, we assume tool is installed
-            if (Directory.Exists(extractPath) && !forceInstall)
+            lock (_installArtifactToolLock)
             {
-                return extractPath;
-            }
-
-            // download artifact tool from ado itself
-            var outputStream = new MemoryStream();
-            await blobClient.GetToolAsync(
-                ArtifactToolName,
-                outputStream,
-                osName,
-                arch,
-                distroName,
-                distroVersion);
-
-            // unpack artifact tool into relevant directory
-            outputStream.Position = 0;
-            using var archive = new ZipArchive(outputStream);
-
-            foreach (var entry in archive.Entries)
-            {
-                string destinationPath = Path.GetFullPath(Path.Combine(extractPath, entry.FullName));
-                var destinationInfo = new FileInfo(destinationPath);
-
-                // ensure the zip file isn't trying to extract outside its path structure, which is possible
-                if (destinationPath.StartsWith(extractPath, StringComparison.Ordinal))
+                // If not installed already, or force install mode is set, install the tool
+                if (!Directory.Exists(extractPath) || forceInstall)
                 {
-                    Directory.CreateDirectory(destinationInfo.DirectoryName);
-                    entry.ExtractToFile(destinationPath, true);
+                    // download artifact tool from ado itself
+                    var outputStream = new MemoryStream();
+                    var artifact = blobClient.GetToolAsync(
+                        ArtifactToolName,
+                        outputStream,
+                        osName,
+                        arch,
+                        distroName,
+                        distroVersion).Result;
+
+                    // unpack artifact tool into relevant directory
+                    outputStream.Position = 0;
+                    using var archive = new ZipArchive(outputStream);
+
+                    foreach (var entry in archive.Entries)
+                    {
+                        string destinationPath = Path.GetFullPath(Path.Combine(extractPath, entry.FullName));
+                        var destinationInfo = new FileInfo(destinationPath);
+
+                        // ensure the zip file isn't trying to extract outside its path structure, which is possible
+                        if (destinationPath.StartsWith(extractPath, StringComparison.Ordinal))
+                        {
+                            Directory.CreateDirectory(destinationInfo.DirectoryName);
+                            entry.ExtractToFile(destinationPath, true);
+                        }
+                    }
                 }
             }
 
