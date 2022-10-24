@@ -43,7 +43,7 @@ jobs:
     - name: Building Project(s)
       run: >-
         dotnet build 
-        -p:Version=${{ steps.version.outputs.version }} 
+        -p:Version=${{ steps.version.outputs.version }}
         --no-restore
 
     - name: Publish Nuget
@@ -52,3 +52,9 @@ jobs:
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
         --source https://api.nuget.org/v3/index.json
         "**/*.nupkg"
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: shift.core.sdk-artifacts
+        path: "**/*.nupkg"
