@@ -4,28 +4,26 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Commands;
 using Shift.Core.Models.Common;
 using Shift.Core.Services;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Microsoft.Internal.MR.ES.Shift.Cli.Commands
+namespace MixedReality.Shift.Cli.Commands
 {
-    public sealed record CreateReleaseCommandHandlerInput(string ManifestPath, string OutputPath) : BaseCommandHandlerInput;
-
-    public class CreateReleaseCommandHanlder : BaseCommandHandler<CreateReleaseCommandHandlerInput>
+    public class PackCommandHandler : BaseCommandHandler<PackCommandHandlerInput>
     {
         private readonly IReleaseService _releaseService;
 
-        public CreateReleaseCommandHanlder(IReleaseService releaseService, ILogger<CreateReleaseCommandHanlder> logger) : base(logger)
+        public PackCommandHandler(IReleaseService releaseService, ILogger<PackCommandHandler> logger) : base(logger)
         {
             _releaseService = releaseService;
         }
 
-        protected override async Task<ShiftResultCode> ExecuteAsyncOverride(CreateReleaseCommandHandlerInput input, CancellationToken cancellationToken)
+        protected override async Task<ShiftResultCode> ExecuteAsyncOverride(PackCommandHandlerInput input, CancellationToken cancellationToken)
         {
             var result = await _releaseService.CreateReleaseAsync(input.ManifestPath, input.OutputPath);
 

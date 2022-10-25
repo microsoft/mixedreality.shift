@@ -162,7 +162,21 @@ namespace Shift.Core.Services.Manifests
             var content = await File.ReadAllTextAsync(manifestPath, Encoding.UTF8);
             var contract = JsonConvert.DeserializeObject<ManifestV1>(content, _converters);
 
-            return Convert(contract);
+            var manifest = Convert(contract);
+            var manifestDirectory = Path.GetDirectoryName(manifestPath);
+
+            foreach (var t in manifest.Components)
+            {
+                if (t.Location is FolderLocation pl)
+                {
+                    if (!Path.IsPathRooted(pl.Path))
+                    {
+                        pl.Path = Path.Combine(manifestDirectory, pl.Path);
+                    }
+                }
+            }
+
+            return manifest;
         }
     }
 }

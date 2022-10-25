@@ -11,29 +11,25 @@ using Shift.Core.Commands;
 using Shift.Core.Models.Common;
 using Shift.Core.Services;
 
-namespace Shift.Cli.Commands
+namespace MixedReality.Shift.Cli.Commands
 {
-    public sealed record InitCommandHandlerInput(
-       string path
-       ) : BaseCommandHandlerInput;
-
-    public class InitCommandHandler : BaseCommandHandler<InitCommandHandlerInput>
+    public class RunCommandHandler : BaseCommandHandler<RunCommandHandlerInput>
     {
         private readonly IInstallationService _installationService;
 
-        public InitCommandHandler(
+        public RunCommandHandler(
             IInstallationService installationService,
-            ILogger<InitCommandHandler> logger
+            ILogger<RunCommandHandler> logger
         ) : base(logger)
         {
             _installationService = installationService;
         }
 
         protected override async Task<ShiftResultCode> ExecuteAsyncOverride(
-            InitCommandHandlerInput input,
+            RunCommandHandlerInput input,
             CancellationToken cancellationToken)
         {
-            return await _installationService.InitLocalAsync(input.path);
+            return await _installationService.InitLocalAsync(input.Path);
         }
     }
 }

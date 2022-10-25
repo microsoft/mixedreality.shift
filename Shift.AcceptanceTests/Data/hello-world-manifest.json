@@ -13,7 +13,9 @@
       "Description": "Initial windows companion component for platform library hosting inProc",
       "DeviceDemands": [],
       "Id": "hello-world",
-      "Location": null,
+      "Location": {
+        "Path": "Contents"
+      },
       "Owner": "shift",
       "Task": {
         "Script": "echo Hello, World > hello-world.txt",

@@ -73,10 +73,10 @@ namespace Shift.Cli.AcceptanceTests
         }
 
         [TestMethod]
-        public async Task Shift_CanInitializeManifest_WithHelloWorldSample()
+        public async Task Shift_CanRunManifest_WithHelloWorldSample()
         {
             // arrange
-            var process = CreateProcess("init \"./Data/hello-world-manifest.json\"");
+            var process = CreateProcess("run \"./Data/hello-world-manifest.json\"");
 
             // act
             process.Start();
@@ -93,11 +93,33 @@ namespace Shift.Cli.AcceptanceTests
         }
 
         [TestMethod]
-        public async Task Shift_CanCreateRelease_WithHelloWorldSample()
+        public async Task Shift_CanDownloadManifest_WithHelloWorldSample()
+        {
+            // arrange
+            var stagingDirectory = Path.Combine(Path.GetTempPath(), nameof(Shift_CanDownloadManifest_WithHelloWorldSample));
+            var process = CreateProcess($"run \"./Data/hello-world-manifest.json\" --download-only --staging-directory {stagingDirectory}");
+
+            // act
+            process.Start();
+            await process.WaitForExitAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
+            var error = await process.StandardError.ReadToEndAsync();
+
+            // write to output, for posterity
+            await Console.Out.WriteLineAsync(output);
+            await Console.Error.WriteLineAsync(error);
+
+            // assert
+            Assert.AreEqual(0, process.ExitCode);
+            Assert.IsTrue(File.Exists(Path.Combine(Path.Combine(stagingDirectory, "hello-world"), "readme.md")));
+        }
+
+        [TestMethod]
+        public async Task Shift_CanPack_WithHelloWorldSample()
         {
             // arrange
             var outputPath = Path.GetTempFileName() + ".zip";
-            var process = CreateProcess($"create-release --manifest-path \"./Data/hello-world-manifest.json\" --output-path \"{outputPath}\"");
+            var process = CreateProcess($"pack --manifest-path \"./Data/hello-world-manifest.json\" --output-path \"{outputPath}\"");
 
             // act
             process.Start();
