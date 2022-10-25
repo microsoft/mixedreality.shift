@@ -21,6 +21,8 @@ namespace MixedReality.Shift.Cli.Commands
                 Description = "The path to the local manifest or zip archive."
             });
 
+            AddOption(new Option<string>("--bundle", "If set, runs the specified bundle tasks"));
+
             AddOption(new Option<bool>("--download-only", "If set, packages are downloaded "));
 
             Handler = CommandHandler.Create<RunCommandHandlerInput, IHost, CancellationToken>(

@@ -38,6 +38,7 @@ namespace Shift.Core.Services
 
         public async Task<ShiftResultCode> RunAsync(
             string manifestPath,
+            string bundle,
             bool downloadOnly,
             string stagingDirectory)
         {
@@ -58,15 +59,28 @@ namespace Shift.Core.Services
 
                 if (downloadOnly)
                 {
-                    // if download only mode is specified, downloads all the available components
-                    foreach (Component component in manifest.Components)
+                    if (!string.IsNullOrEmpty(bundle))
                     {
-                        resultCode = await _componentService.DownloadComponentAsync(component, stagingDirectory);
+                        resultCode = await _bundleService.DownloadBundleAsync(manifest, bundle, stagingDirectory);
+                    }
+                    else
+                    {
+                        foreach (Component component in manifest.Components)
+                        {
+                            resultCode = await _componentService.DownloadComponentAsync(component, stagingDirectory);
+                        }
                     }
                 }
                 else
                 {
-                    resultCode = await _bundleService.DownloadAndProcessDefaultBundleAsync(manifest, stagingDirectory);
+                    if (!string.IsNullOrEmpty(bundle))
+                    {
+                        resultCode = await _bundleService.DownloadAndProcessBundleAsync(manifest, bundle, stagingDirectory);
+                    }
+                    else
+                    {
+                        resultCode = await _bundleService.DownloadAndProcessDefaultBundleAsync(manifest, stagingDirectory);
+                    }
                 }
 
                 return resultCode;

@@ -10,6 +10,7 @@ namespace MixedReality.Shift.Cli.Commands
 {
     public sealed record RunCommandHandlerInput(
        string Path,
+       string Bundle,
        bool DownloadOnly,
        string StagingDirectory=default
        ) : BaseCommandHandlerInput;

@@ -16,6 +16,7 @@ namespace Shift.Core.Services
     {
         Task<ShiftResultCode> RunAsync(
             string manifestPath,
+            string bundle,
             bool downloadOnly,
             string stagingDirectory);
 
