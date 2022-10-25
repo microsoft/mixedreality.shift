@@ -8,5 +8,8 @@ using Shift.Core.Commands;
 
 namespace MixedReality.Shift.Cli.Commands
 {
-    public sealed record PackCommandHandlerInput(string ManifestPath, string OutputPath) : BaseCommandHandlerInput;
+    public sealed record PackCommandHandlerInput(
+        string ManifestPath,
+        string OutputPath
+    ) : BaseCommandHandlerInput;
 }

@@ -63,12 +63,14 @@ namespace Shift.UnitTests.ServiceTests
                     It.Is<string>(x => x == project),
                     It.Is<string>(x => x == feed),
                     It.Is<string>(x => x == version),
+                    It.IsAny<string>(),
                     It.IsAny<string>()),
                 Times.Once());
             _bundleService
                 .Verify(x => x.DownloadAndProcessDefaultBundleAsync(
-                    It.IsAny<Manifest>()),
-                    Times.Once());
+                    It.IsAny<Manifest>(),
+                    It.IsAny<string>()
+                ), Times.Once());
         }
 
         [TestMethod]
@@ -93,7 +95,8 @@ namespace Shift.UnitTests.ServiceTests
                     Times.Once);
             _bundleService
                 .Verify(x => x.DownloadAndProcessDefaultBundleAsync(
-                    It.IsAny<Manifest>()),
+                    It.IsAny<Manifest>(),
+                     It.IsAny<string>()),
                     Times.Once());
         }
     }

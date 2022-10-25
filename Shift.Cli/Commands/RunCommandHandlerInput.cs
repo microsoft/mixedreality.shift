@@ -9,6 +9,8 @@ using Shift.Core.Commands;
 namespace MixedReality.Shift.Cli.Commands
 {
     public sealed record RunCommandHandlerInput(
-       string Path, bool DownloadOnly, string StagingDirectory
+       string Path,
+       bool DownloadOnly,
+       string StagingDirectory=default
        ) : BaseCommandHandlerInput;
 }

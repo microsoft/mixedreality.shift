@@ -33,7 +33,8 @@ namespace Shift.Core.Services.Manifests
             string project,
             string feed,
             string version = null,
-            string manifestPath = null);
+            string manifestPath = null,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Gets the components in the specified bundle

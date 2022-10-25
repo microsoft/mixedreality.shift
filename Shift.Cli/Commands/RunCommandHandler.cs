@@ -29,7 +29,10 @@ namespace MixedReality.Shift.Cli.Commands
             RunCommandHandlerInput input,
             CancellationToken cancellationToken)
         {
-            return await _installationService.InitLocalAsync(input.Path);
+            return await _installationService.RunAsync(
+                input.Path, 
+                input.DownloadOnly, 
+                input.StagingDirectory);
         }
     }
 }

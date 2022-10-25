@@ -4,6 +4,7 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Shift.Core;
 using Shift.Core.Models.Plugins;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -16,7 +17,7 @@ namespace MixedReality.Shift.Cli.Commands
         {
             AddGlobalOption(new Option<string>(
                 aliases: new[] { "--staging-directory" },
-                getDefaultValue: () => "%Temp%\\Shift",
+                getDefaultValue: () => ProgramDataPath.GetStagingDirectory(),
                 description: "Staging directory to store all the downloaded artifacts.")
             );
 

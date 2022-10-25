@@ -32,7 +32,7 @@ namespace Shift.Cli
     {
         public static int Main(string[] args)
         {
-            string programPath = ProgramDataPath.GetProgramRunningDirectory();
+            string programPath = ProgramDataPath.GetWorkingDirectory();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(programPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)

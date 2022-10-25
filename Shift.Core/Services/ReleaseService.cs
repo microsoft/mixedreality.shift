@@ -82,7 +82,7 @@ namespace Shift.Core.Services
                 string targetDir = Path.Combine(downloadRoot, "shift");
                 Directory.CreateDirectory(targetDir);
 
-                string sourceDir = ProgramDataPath.GetProgramRunningDirectory();
+                string sourceDir = ProgramDataPath.GetWorkingDirectory();
                 foreach (var file in Directory.GetFiles(sourceDir))
                 {
                     File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)));
@@ -139,7 +139,7 @@ namespace Shift.Core.Services
                 string manifestPath = FindManifestPath();
                 Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
 
-                string releaseDirectory = new DirectoryInfo(ProgramDataPath.GetProgramRunningDirectory()).Parent.FullName;
+                string releaseDirectory = new DirectoryInfo(ProgramDataPath.GetWorkingDirectory()).Parent.FullName;
                 resultCode = await _bundleService.ProcessDefaultBundleFromReleaseAsync(manifest, releaseDirectory);
 
                 _logger.LogInformation("Initialization complete.");
@@ -170,7 +170,7 @@ namespace Shift.Core.Services
         private string FindManifestPath()
         {
             string manifestFileName = "manifest.json";
-            string programPath = ProgramDataPath.GetProgramRunningDirectory();
+            string programPath = ProgramDataPath.GetWorkingDirectory();
 
             string manifestPath = Path.Combine(programPath, manifestFileName);
             if (File.Exists(manifestPath))
@@ -184,7 +184,7 @@ namespace Shift.Core.Services
                 return manifestPath;
             }
 
-            manifestPath = Path.Combine(ProgramDataPath.GetProgramDataRootPath(), manifestPath);
+            manifestPath = Path.Combine(ProgramDataPath.GetStagingDirectory(), manifestPath);
             if (File.Exists(manifestPath))
             {
                 return manifestPath;

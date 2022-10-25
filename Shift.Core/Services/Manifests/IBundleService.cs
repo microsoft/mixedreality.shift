@@ -20,46 +20,64 @@ namespace Shift.Core.Services.Manifests
         /// </summary>
         /// <param name="manifest">Manifest object</param>
         /// <param name="bundle">Bundle name</param>
-        Task<ShiftResultCode> DownloadAndProcessBundleAsync(Manifest manifest, string bundle);
+        Task<ShiftResultCode> DownloadAndProcessBundleAsync(
+            Manifest manifest,
+            string bundle,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Downloads and processes the components in the default bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>
-        Task<ShiftResultCode> DownloadAndProcessDefaultBundleAsync(Manifest manifest);
+        Task<ShiftResultCode> DownloadAndProcessDefaultBundleAsync(
+            Manifest manifest,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Downloads the components in the specified bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>
         /// <param name="bundle">Bundle name</param>
-        Task<ShiftResultCode> DownloadBundleAsync(Manifest manifest, string bundle);
+        Task<ShiftResultCode> DownloadBundleAsync(
+            Manifest manifest,
+            string bundle,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Downloads the components in the specified bundle
         /// </summary>
         /// <param name="manifestPath">Path to manifest file</param>
         /// <param name="bundle">Bundle name</param>
-        Task<ShiftResultCode> DownloadBundleAsync(string manifestPath, string bundle);
+        Task<ShiftResultCode> DownloadBundleAsync(
+            string manifestPath,
+            string bundle,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Downloads the components in the default bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>
-        Task<ShiftResultCode> DownloadDefaultBundleAsync(Manifest manifest);
+        Task<ShiftResultCode> DownloadDefaultBundleAsync(
+            Manifest manifest,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Processes the components in the specified bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>
         /// <param name="bundle">Bundle name</param>
-        Task<ShiftResultCode> ProcessBundleAsync(Manifest manifest, string bundle);
+        Task<ShiftResultCode> ProcessBundleAsync(
+            Manifest manifest,
+            string bundle,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Proceses the components in the default bundle
         /// </summary>
         /// <param name="manifest">Manifest object</param>
-        Task<ShiftResultCode> ProcessDefaultBundleAsync(Manifest manifest);
+        Task<ShiftResultCode> ProcessDefaultBundleAsync(
+            Manifest manifest,
+            string stagingDirectory = null);
 
         /// <summary>
         /// This command is called from a release image. Processes the default components in the
@@ -67,6 +85,8 @@ namespace Shift.Core.Services.Manifests
         /// </summary>
         /// <param name="manifest">Manifest object</param>
         /// <param name="programPath">Path to the current working directory</param>
-        Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(Manifest manifest, string programPath);
+        Task<ShiftResultCode> ProcessDefaultBundleFromReleaseAsync(
+            Manifest manifest,
+            string programPath);
     }
 }

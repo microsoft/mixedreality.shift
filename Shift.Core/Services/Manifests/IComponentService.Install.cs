@@ -21,7 +21,10 @@ namespace Shift.Core.Services.Manifests
         /// <param name="component">The component to install.</param>
         /// <param name="componentLocation">The local path where the component is located.</param>
         /// <returns>The result code.</returns>
-        Task<ShiftResultCode> InstallComponentAsync(Component component, string componentLocation = null);
+        Task<ShiftResultCode> InstallComponentAsync(
+            Component component,
+            string componentLocation = null,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Given a list of components, installs them

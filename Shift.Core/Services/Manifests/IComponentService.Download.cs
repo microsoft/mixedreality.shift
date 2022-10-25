@@ -19,7 +19,9 @@ namespace Shift.Core.Services.Manifests
         /// Download the specified component.
         /// </summary>
         /// <param name="component">The component to download.</param>
-        Task<ShiftResultCode> DownloadComponentAsync(Component component, string downloadRoot = null);
+        Task<ShiftResultCode> DownloadComponentAsync(
+            Component component,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Downloads specified versions of components

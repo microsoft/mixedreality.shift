@@ -14,6 +14,11 @@ namespace Shift.Core.Services
     /// </summary>
     public interface IInstallationService
     {
+        Task<ShiftResultCode> RunAsync(
+            string manifestPath,
+            bool downloadOnly,
+            string stagingDirectory);
+
         /// <summary>
         /// Given the location of the manifest file on the feed, downloads the appropriate
         /// components and performs the associated tasks
@@ -55,7 +60,8 @@ namespace Shift.Core.Services
             string organization,
             string project,
             string feed,
-            string manifestPath = null);
+            string manifestPath = null,
+            string stagingDirectory = null);
 
         /// <summary>
         /// Installs the components in the given bundle
@@ -65,6 +71,7 @@ namespace Shift.Core.Services
         /// <returns></returns>
         Task<ShiftResultCode> InstallBundleAsync(
             string bundle,
-            string manifestPath);
+            string manifestPath,
+            string stagingDirectory = null);
     }
 }

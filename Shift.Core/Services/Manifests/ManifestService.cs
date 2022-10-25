@@ -53,9 +53,10 @@ namespace Shift.Core.Services.Manifests
             string project,
             string feed,
             string version = null,
-            string manifestPath = null)
+            string manifestPath = null,
+            string stagingDirectory = null)
         {
-            var downloadRoot = ProgramDataPath.GetProgramDataRootPath();
+            var downloadRoot = stagingDirectory ?? ProgramDataPath.GetStagingDirectory();
             manifestPath = string.IsNullOrEmpty(manifestPath) ? Path.Join(downloadRoot, $"manifest.json") : manifestPath;
 
             _logger.LogInformation($"Getting the latest version of {packageName}...");
