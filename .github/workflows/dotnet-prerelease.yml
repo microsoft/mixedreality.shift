@@ -46,15 +46,16 @@ jobs:
         -p:Version=${{ steps.version.outputs.version }}
         --no-restore
 
-    - name: Publish Nuget
+    - name: Publish Nuget for public comsumption
       run: >-
         dotnet nuget push 
         --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
         --source https://api.nuget.org/v3/index.json
         "**/*.nupkg"
 
-    - name: Upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: shift.core.sdk-artifacts
-        path: "**/*.nupkg"
+    - name: Publish Nuget for internal consumption
+      run: >-
+        dotnet nuget push
+        --api-key ${{ secrets.AZURE_DEVOPS_TOKEN }}
+        --source "analog.aie.engineeringefficiency-upstream"
+        "**/*.nupkg"
