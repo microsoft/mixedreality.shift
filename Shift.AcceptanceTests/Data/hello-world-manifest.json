@@ -6,6 +6,13 @@
       ],
       "Description": "Creates a text file containing 'Hello, World.'",
       "Id": "default"
+    },
+    {
+      "Components": [
+        "hello-world-2"
+      ],
+      "Description": "Creates a text file containing 'Hello, World.'",
+      "Id": "supplemental"
     }
   ],
   "Components": [
@@ -19,6 +26,20 @@
       "Owner": "shift",
       "Task": {
         "Script": "echo Hello, World > hello-world.txt",
+        "Elevate": true,
+        "Type": "pwsh"
+      }
+    },
+    {
+      "Description": "This is a task that is not in the default bundle",
+      "DeviceDemands": [],
+      "Id": "hello-world-2",
+      "Location": {
+        "Path": "Contents2"
+      },
+      "Owner": "shift",
+      "Task": {
+        "Script": "echo Hello, World > hello-world-2.txt",
         "Elevate": true,
         "Type": "pwsh"
       }

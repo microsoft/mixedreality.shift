@@ -93,6 +93,26 @@ namespace Shift.Cli.AcceptanceTests
         }
 
         [TestMethod]
+        public async Task Shift_CanRunManifest_WithBundleOptionAndHelloWorldSample()
+        {
+            // arrange
+            var process = CreateProcess("run \"./Data/hello-world-manifest.json\" --bundle supplemental");
+
+            // act
+            process.Start();
+            await process.WaitForExitAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
+            var error = await process.StandardError.ReadToEndAsync();
+
+            // write to output, for posterity
+            await Console.Out.WriteLineAsync(output);
+            await Console.Error.WriteLineAsync(error);
+
+            // assert
+            Assert.AreEqual(0, process.ExitCode);
+        }
+
+        [TestMethod]
         public async Task Shift_CanDownloadManifest_WithHelloWorldSample()
         {
             // arrange
@@ -112,6 +132,7 @@ namespace Shift.Cli.AcceptanceTests
             // assert
             Assert.AreEqual(0, process.ExitCode);
             Assert.IsTrue(File.Exists(Path.Combine(Path.Combine(stagingDirectory, "hello-world"), "readme.md")));
+            Assert.IsTrue(File.Exists(Path.Combine(Path.Combine(stagingDirectory, "hello-world-2"), "readme.md")));
         }
 
         [TestMethod]
