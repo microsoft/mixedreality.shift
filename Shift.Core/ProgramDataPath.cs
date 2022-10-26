@@ -11,23 +11,23 @@ namespace Shift.Core
 {
     public static class ProgramDataPath
     {
-        private static readonly string rootPath = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Shift");
+        private static readonly string stagingDirectory = "%Temp%\\Shift";
 
         public static string GetPacakgeInstallationPath(string packageName, string feedName, string version)
         {
-            return Path.Combine(rootPath, packageName, feedName, version) + "\\";
+            return Path.Combine(stagingDirectory, packageName, feedName, version) + "\\";
         }
 
-        public static string GetProgramDataRootPath()
+        public static string GetStagingDirectory()
         {
-            if (!Directory.Exists(rootPath))
+            if (!Directory.Exists(stagingDirectory))
             {
-                Directory.CreateDirectory(rootPath);
+                Directory.CreateDirectory(stagingDirectory);
             }
-            return rootPath;
+            return stagingDirectory;
         }
 
-        public static string GetProgramRunningDirectory()
+        public static string GetWorkingDirectory()
         {
             return AppContext.BaseDirectory;
         }

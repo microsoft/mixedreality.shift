@@ -10,21 +10,25 @@ using System.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Shift.Cli.Commands
+namespace MixedReality.Shift.Cli.Commands
 {
-    internal class InitCommand : Command
+    internal class RunCommand : Command
     {
-        public InitCommand() : base("init", "Install components from a manifest.")
+        public RunCommand() : base("run", "Run the tasks specified in the manifest; path can be to a packaged manifest (.zip) or manifest file (.json).")
         {
             AddArgument(new Argument("path")
             {
-                Description = "The path to the local manifest."
+                Description = "The path to the local manifest or zip archive."
             });
 
-            Handler = CommandHandler.Create<InitCommandHandlerInput, IHost, CancellationToken>(
+            AddOption(new Option<string>("--bundle", "If set, runs the specified bundle tasks"));
+
+            AddOption(new Option<bool>("--download-only", "If set, packages are downloaded "));
+
+            Handler = CommandHandler.Create<RunCommandHandlerInput, IHost, CancellationToken>(
                 async (input, host, cancellationToken) =>
                 {
-                    var handler = ActivatorUtilities.CreateInstance<InitCommandHandler>(host.Services);
+                    var handler = ActivatorUtilities.CreateInstance<RunCommandHandler>(host.Services);
                     return (int)await handler.ExecuteAsync(input, cancellationToken);
                 });
         }

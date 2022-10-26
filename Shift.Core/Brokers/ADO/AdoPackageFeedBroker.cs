@@ -254,7 +254,7 @@ namespace Shift.Core.Brokers
                 distroName,
                 distroVersion);
 
-            var extractPath = path ?? Path.Combine(ProgramDataPath.GetProgramDataRootPath(), ArtifactToolName, toolInfo.Version);
+            var extractPath = path ?? Path.Combine(ProgramDataPath.GetStagingDirectory(), ArtifactToolName, toolInfo.Version);
 
             lock (_installArtifactToolLock)
             {

@@ -19,7 +19,7 @@ namespace Shift.Core.Services.Manifests
 {
     public partial class ComponentService : IComponentService
     {
-        public async Task<ShiftResultCode> DownloadComponentAsync(Component component, string downloadRoot = null)
+        public async Task<ShiftResultCode> DownloadComponentAsync(Component component, string stagingDirectory = null)
         {
             var telemetryEvent = new DownloadEvent();
             telemetryEvent.ComponentId = component.Id;
@@ -30,13 +30,15 @@ namespace Shift.Core.Services.Manifests
 
             try
             {
-                downloadRoot ??= ProgramDataPath.GetProgramDataRootPath();
+                stagingDirectory ??= ProgramDataPath.GetStagingDirectory();
                 string downloadDir = string.Empty;
+
                 if (component.Location is PackageLocation packageLocation)
                 {
                     telemetryEvent.ComponentVersion = packageLocation.Version;
 
-                    downloadDir = $@"{downloadRoot}\{component.Id}\{packageLocation.Version}";
+                    downloadDir = $@"{stagingDirectory}\{component.Id}\{packageLocation.Version}";
+
                     if (!Directory.Exists(downloadDir))
                     {
                         _logger.LogInformation($"Downloading component [{component.Id}]");
@@ -46,8 +48,7 @@ namespace Shift.Core.Services.Manifests
                             packageLocation.Name,
                             packageLocation.Project,
                             packageLocation.Version,
-                            packageLocation.Organization
-                            );
+                            packageLocation.Organization);
                     }
                     else
                     {
@@ -59,7 +60,7 @@ namespace Shift.Core.Services.Manifests
                 }
                 else if (component.Location is FolderLocation folderLocation)
                 {
-                    downloadDir = $@"{downloadRoot}\{component.Id}";
+                    downloadDir = $@"{stagingDirectory}\{component.Id}";
                     CopyDirectory(folderLocation.Path, downloadDir, true);
                 }
 
@@ -113,7 +114,8 @@ namespace Shift.Core.Services.Manifests
         private async Task<ShiftResultCode> DownloadComponentsAsync(
             string[] components,
             string[] versions,
-            Manifest manifest)
+            Manifest manifest,
+            string stagingDirectory = null)
         {
             List<Component> componentsToProcess = GetComponentFromManifestByComponentIds(manifest, components, versions);
 
@@ -121,7 +123,7 @@ namespace Shift.Core.Services.Manifests
             {
                 _logger.LogTrace($"Downloading component [{component.Id}].");
 
-                await DownloadComponentAsync(component);
+                await DownloadComponentAsync(component, stagingDirectory);
 
                 _logger.LogTrace($"Downloaded component [{component.Id}].");
             }

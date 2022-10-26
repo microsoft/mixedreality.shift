@@ -4,28 +4,26 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using Shift.Core;
+using Shift.Core.Models.Plugins;
 using System.Collections.Generic;
 using System.CommandLine;
-using Microsoft.Internal.MR.ES.Shift.Cli.Commands;
-using Shift.Core.Models.Plugins;
 
-namespace Shift.Cli.Commands
+namespace MixedReality.Shift.Cli.Commands
 {
     public sealed class ProgramRootCommand : RootCommand
     {
         public ProgramRootCommand(IEnumerable<PluginDefinition> plugins)
         {
             AddGlobalOption(new Option<string>(
-                aliases: new[] { "--workingDir" },
-                getDefaultValue: () => "%LocalAppData%\\MRShift",
-                description: "Working directory to store all the downloaded artifacts.")
+                aliases: new[] { "--staging-directory" },
+                getDefaultValue: () => ProgramDataPath.GetStagingDirectory(),
+                description: "Staging directory to store all the downloaded artifacts.")
             );
 
-            AddCommand(new InitCommand());
-            AddCommand(new InstallCommand());
-            AddCommand(new DownloadCommand());
+            AddCommand(new RunCommand());
             AddCommand(new VersionCommand());
-            AddCommand(new CreateReleaseCommand());
+            AddCommand(new PackCommand());
 
             foreach (var p in plugins)
             {

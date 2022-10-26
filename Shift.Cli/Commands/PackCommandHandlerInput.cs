@@ -4,14 +4,12 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Shift.Core.Models.Events
+using Shift.Core.Commands;
+
+namespace MixedReality.Shift.Cli.Commands
 {
-    public class InitEvent : BaseEvent
-    {
-        public string ManifestPath { get; set; }
-
-        public bool DownloadOnly { get; set; }
-
-        public string StagingDirectory { get; set; }
-    }
+    public sealed record PackCommandHandlerInput(
+        string ManifestPath,
+        string OutputPath
+    ) : BaseCommandHandlerInput;
 }

@@ -75,9 +75,9 @@ namespace Shift.Core.Services.Manifests
             }
         }
 
-        private string GetComponentDownloadLocation(Component component)
+        private string GetComponentDownloadLocation(Component component, string stagingDirectory = null)
         {
-            var downloadRoot = ProgramDataPath.GetProgramDataRootPath();
+            var downloadRoot = stagingDirectory ?? ProgramDataPath.GetStagingDirectory();
             string downloadDir = string.Empty;
 
             if (component.Location is PackageLocation packageLocation)

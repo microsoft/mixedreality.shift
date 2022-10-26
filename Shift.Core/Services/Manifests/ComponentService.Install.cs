@@ -20,7 +20,10 @@ namespace Shift.Core.Services.Manifests
 {
     public partial class ComponentService : IComponentService
     {
-        public async Task<ShiftResultCode> InstallComponentAsync(Component component, string componentLocation = null)
+        public async Task<ShiftResultCode> InstallComponentAsync(
+            Component component,
+            string componentLocation = null,
+            string stagingDirectory = null)
         {
             var telemetryEvent = new InstallEvent();
             telemetryEvent.ComponentId = component.Id;
@@ -31,7 +34,7 @@ namespace Shift.Core.Services.Manifests
 
             try
             {
-                componentLocation ??= GetComponentDownloadLocation(component);
+                componentLocation ??= GetComponentDownloadLocation(component, stagingDirectory);
                 if (component.Task != null)
                 {
                     telemetryEvent.TaskType = component.Task.Type;
@@ -98,7 +101,8 @@ namespace Shift.Core.Services.Manifests
         private async Task<ShiftResultCode> InstallComponentsAsync(
             string[] components,
             string[] versions,
-            Manifest manifest)
+            Manifest manifest,
+            string stagingDirectory = null)
         {
             List<Component> componentsToProcess = GetComponentFromManifestByComponentIds(manifest, components, versions);
 
@@ -106,7 +110,7 @@ namespace Shift.Core.Services.Manifests
             {
                 _logger.LogTrace($"Processing component [{component.Id}].");
 
-                await DownloadComponentAsync(component);
+                await DownloadComponentAsync(component, stagingDirectory);
 
                 await InstallComponentAsync(component);
             }

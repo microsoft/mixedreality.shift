@@ -60,7 +60,7 @@ namespace Shift.UnitTests.ServiceTests
                 .Verify(x => x.DownloadComponentAsync(
                     It.Is<Component>(component => component.Id == "noTaskTestComponent"),
                     It.IsAny<string>()
-                    ), Times.Once());
+                ), Times.Once());
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Shift.UnitTests.ServiceTests
                 .Verify(x => x.DownloadComponentAsync(
                     It.Is<Component>(component => component.Id == "pluginTestComponent" || component.Id == "pwshTestComponent"),
                     It.IsAny<string>()
-                    ), Times.Exactly(2));
+                ), Times.Exactly(2));
         }
 
         [TestMethod]
@@ -89,8 +89,9 @@ namespace Shift.UnitTests.ServiceTests
             _componentService
                 .Verify(x => x.InstallComponentAsync(
                     It.Is<Component>(component => component.Id == "noTaskTestComponent"),
+                    It.IsAny<string>(),
                     It.IsAny<string>()
-                    ), Times.Once());
+                ), Times.Once());
         }
 
         [TestMethod]
@@ -104,8 +105,9 @@ namespace Shift.UnitTests.ServiceTests
             _componentService
                 .Verify(x => x.InstallComponentAsync(
                     It.Is<Component>(component => component.Id == "pluginTestComponent" || component.Id == "pwshTestComponent"),
+                    It.IsAny<string>(),
                     It.IsAny<string>()
-                    ), Times.Exactly(2));
+                ), Times.Exactly(2));
         }
     }
 }

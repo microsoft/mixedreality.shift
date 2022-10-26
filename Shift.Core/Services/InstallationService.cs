@@ -6,7 +6,6 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Models.Common;
@@ -35,6 +34,82 @@ namespace Shift.Core.Services
             _bundleService = bundleService;
             _manifestService = manifestService;
             _logger = logger;
+        }
+
+        public async Task<ShiftResultCode> RunAsync(
+            string manifestPath,
+            string bundle,
+            bool downloadOnly,
+            string stagingDirectory)
+        {
+            var telemetryEvent = new InitEvent()
+            {
+                ManifestPath = manifestPath,
+                DownloadOnly = downloadOnly,
+                StagingDirectory = stagingDirectory
+            };
+
+            var stopwatch = Stopwatch.StartNew();
+            Exception exception = null;
+            ShiftResultCode resultCode = ShiftResultCode.Unknown;
+            
+            try
+            {
+                Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
+
+                if (downloadOnly)
+                {
+                    if (!string.IsNullOrEmpty(bundle))
+                    {
+                        resultCode = await _bundleService.DownloadBundleAsync(manifest, bundle, stagingDirectory);
+                    }
+                    else
+                    {
+                        foreach (Component component in manifest.Components)
+                        {
+                            resultCode = await _componentService.DownloadComponentAsync(component, stagingDirectory);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(bundle))
+                    {
+                        resultCode = await _bundleService.DownloadAndProcessBundleAsync(manifest, bundle, stagingDirectory);
+                    }
+                    else
+                    {
+                        resultCode = await _bundleService.DownloadAndProcessDefaultBundleAsync(manifest, stagingDirectory);
+                    }
+                }
+
+                return resultCode;
+            }
+            catch (ShiftException ex)
+            {
+                telemetryEvent.ExceptionOcurred = true;
+                telemetryEvent.ResultCode = ex.ResultCode.ToString();
+                exception = ex;
+                throw;
+            }
+            catch (Exception ex)
+            {
+                telemetryEvent.ExceptionOcurred = true;
+                exception = ex;
+                throw;
+            }
+            finally
+            {
+                telemetryEvent.DurationMS = stopwatch.ElapsedMilliseconds;
+                telemetryEvent.ResultCode = resultCode.ToString();
+
+                _logger.Log(telemetryEvent.ExceptionOcurred ?
+                    LogLevel.Critical : LogLevel.Information,
+                    new EventId(),
+                    telemetryEvent,
+                    exception,
+                    LogEventSerialization.FormatState);
+            }
         }
 
         public async Task<ShiftResultCode> InitAsync(
@@ -138,23 +213,33 @@ namespace Shift.Core.Services
             string organization,
             string project,
             string feed,
-            string manifestPath)
+            string manifestPath,
+            string stagingDirectory = null)
         {
-            Manifest manifest = await _manifestService.DownloadManifestAndConvertAsync(packageName, organization, project, feed, manifestPath: manifestPath);
-            return await InstallBundleAsync(bundle, manifest);
+            Manifest manifest = await _manifestService.DownloadManifestAndConvertAsync(
+                packageName,
+                organization,
+                project,
+                feed,
+                manifestPath: manifestPath,
+                stagingDirectory: stagingDirectory);
+
+            return await InstallBundleAsync(bundle, manifest, stagingDirectory);
         }
 
         public async Task<ShiftResultCode> InstallBundleAsync(
             string bundle,
-            string manifestPath)
+            string manifestPath,
+            string stagingDirectory = null)
         {
             Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
-            return await InstallBundleAsync(bundle, manifest);
+            return await InstallBundleAsync(bundle, manifest, stagingDirectory);
         }
 
         private async Task<ShiftResultCode> InstallBundleAsync(
             string bundle,
-            Manifest manifest)
+            Manifest manifest,
+            string stagingDirectory = null)
         {
             var telemetryEvent = new InstallEvent();
             var stopwatch = Stopwatch.StartNew();
@@ -169,10 +254,11 @@ namespace Shift.Core.Services
                 {
                     _logger.LogTrace($"Processing component [{component.Id}].");
 
-                    await _componentService.DownloadComponentAsync(component);
+                    await _componentService.DownloadComponentAsync(component, stagingDirectory);
 
-                    resultCode = await _componentService.InstallComponentAsync(component);
+                    resultCode = await _componentService.InstallComponentAsync(component, stagingDirectory: stagingDirectory);
                 }
+
                 return resultCode;
             }
             catch (ShiftException ex)

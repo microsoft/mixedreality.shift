@@ -53,9 +53,10 @@ namespace Shift.Core.Services.Manifests
             string project,
             string feed,
             string version = null,
-            string manifestPath = null)
+            string manifestPath = null,
+            string stagingDirectory = null)
         {
-            var downloadRoot = ProgramDataPath.GetProgramDataRootPath();
+            var downloadRoot = stagingDirectory ?? ProgramDataPath.GetStagingDirectory();
             manifestPath = string.IsNullOrEmpty(manifestPath) ? Path.Join(downloadRoot, $"manifest.json") : manifestPath;
 
             _logger.LogInformation($"Getting the latest version of {packageName}...");
@@ -162,7 +163,21 @@ namespace Shift.Core.Services.Manifests
             var content = await File.ReadAllTextAsync(manifestPath, Encoding.UTF8);
             var contract = JsonConvert.DeserializeObject<ManifestV1>(content, _converters);
 
-            return Convert(contract);
+            var manifest = Convert(contract);
+            var manifestDirectory = Path.GetDirectoryName(manifestPath);
+
+            foreach (var t in manifest.Components)
+            {
+                if (t.Location is FolderLocation pl)
+                {
+                    if (!Path.IsPathRooted(pl.Path))
+                    {
+                        pl.Path = Path.Combine(manifestDirectory, pl.Path);
+                    }
+                }
+            }
+
+            return manifest;
         }
     }
 }
