@@ -1,22 +1,22 @@
-# Shift CLI
+# Introduction
+*Shift* is a cross-platform application that is capable of running arbitrary pipelines on endpoints. Shift does not require complicated server-agent architectures and can be deployed quickly to endpoints without significant infrastructure requirements. It is capable of reporting results asynchronously via cloud-based telemetry.
 
-- [Shift Core](#shift-core)
-  - [manifest.json](#manifestjson)
-  - [Specifying the task](#specifying-the-task)
-    - [Powershell Task](#powershell-task)
-    - [Custom Task](#custom-task)
-  - [Specifying a network directory location](#specifying-a-network-directory-location)
-  - [Update a version in the manifest](#update-a-version-in-the-manifest)
-- [Shift CLI Commands](#shift-cli-commands)
+## Running  *Shift* 
+Shift runs a user-defined *manifest* on a host. A manifest file is a list of components and tasks that makes up a product. Think of components as lego pieces, and the tasks as an instruction set. Shift downloads the components from the location specified in the manifest file, and performs a set of instructions specified sequentially. Essentially, Shift Core analyzes and interprets the manifest file.
 
+`shift.exe run [path to the manifest file or standalone archive]`
 
-## Introduction
-Shift CLI is a command line interface tool that surfaces Shift Core functionality. 
+## Packing maniests
+Manifests can also be packed up so they can be executed offline without network connectivity. This is useful for air gapped, high security or low connectivity situations. The pack command produces an archive that contains all remote resources.
 
-## Shift Core
-Shift always comes in pairs with a manifest file. A manifest file is a list of components and tasks that makes up a product. Think of components as lego pieces, and the tasks as an instruction set. Shift downloads the components from the location specified in the manifest file, and performs a set of instructions specified sequentially. Essentially, Shift Core analyzes and interprets the manifest file.
+`shift.exe pack --manifest-path [path to the manifest file] --output-path [path to the output archive]`
 
-### manifest.json
+## Additional commands and options
+Additional commands can be discovered using the Shift application.
+
+`shift.exe -h`
+
+## Creating a manifest.json
 
 Manifest contains a list of components, a list of bundles, component locations, and component tasks. Below is an example of a manifest file. 
 
@@ -67,8 +67,8 @@ Manifest contains a list of components, a list of bundles, component locations, 
 |            | id            | Unique identifier for the bundle                                                                                                                                                                                                      | "default"                                                                                                                                                                                                                                                                                              | string           |
 
 
-### Specifying the task
-#### Powershell task
+## Specifying tasks
+### Powershell task
 
 You can specify a PowerShell task as below:
 ```
@@ -90,7 +90,7 @@ You can specify a PowerShell task as below:
     }
 }
 ```
-#### Custom task
+### Custom task
 
 Shift also allows you to specify custom tasks. This is done through writing a custom plugin for your product. Implement the abstract class `PluginDefinition`, and add it to the list of plugin definitions in the `Program.cs` file within the cli project. Below is an example component with a custom plugin task. Reach out to chaelee@microsoft.com for questions.
 ```
@@ -113,52 +113,44 @@ Shift also allows you to specify custom tasks. This is done through writing a cu
 }
 ```
 
-#### Specifying a network directory location
+## Configuring component locations
+### Specifying a network directory location
 
 You can also specify the network directory location to copy the file. This is not advised since it may be unreliable and we are unsure how long we will support this.
 
 ```
 {
     "id": "directoryTestComponent",
-    "description": "Tests a component that is download only, no task.",
-    "owner": "chaelee",
-    "deviceDemands": [ "windows", "pc" ],
     "location": {
         "path": "\\\\mrfs\\private\\openxr\\ARDK-WinInProcVulkan\\CannonDemo"
     }
 }
 ```
+### Specifying a HTTP location
 
-## Shift CLI commands
-___
-`shift.exe init --path [path to the local manifest file]`
+You can also specify a file located on a webs erver.
 
-Downloads and installs the specified local manifest.
-___
-`shift.exe install [path to the local manifest file] -c [components] -v [versions] -b [bundle]`
-
-Install a specific component
-This command lets you download and install a specific component. You may input a single component by its id, or a comma-separated list of components. If you do not input a version number, the version number from the lkg (latest-stable) build will be grabbed. If you want to install multiple components but want to specify a single version number, version input should also be a comma-separated list of versions. Notice the commas in the below example:
-
-| command | component 1 version | component 2 version |
-| ------- | ------------------- | ------------------- |
-shift.exe install c1,c2 | latest stable | latest stable |
-shift.exe install c1,c2 -v 0.0.1, | 0.0.1 | latest stable |
-shift.exe install c1,c2 -v ,0.0.1 | latest stable | 0.0.1 |
-shift.exe install c1,c2 -v 0.0.1,0.0.1 | 0.0.1 | 0.0.1 |
-___
-`shift.exe download [path to the local manifest file] -c [components] -v [versions] -b [bundle]`
-
-This command lets you download a specific component. You may input a single component by its id, or a comma-separated list of components. If you do not input a version number, the version number from the lkg (latest-stable) build will be grabbed. If you want to download multiple components but want to specify a version number for a specific component, version input should also be a comma-separated list of versions. Notice the commas in the below example:
-
-| command | component 1 version | component 2 version |
-| ------- | ------------------- | ------------------- |
-shift.exe install c1,c2 | latest stable | latest stable |
-shift.exe install c1,c2 -v 0.0.1, | 0.0.1 | latest stable |
-shift.exe install c1,c2 -v ,0.0.1 | latest stable | 0.0.1 |
-shift.exe install c1,c2 -v 0.0.1,0.0.1 | 0.0.1 | 0.0.1 |
-___
-
+```
+{
+    "id": "httpTestComponent",
+    "location": {
+        "uri": "https://microsoft.com/favicon.ico"
+    }
+}
+```
+### Specifying an Azure DevOps Feed location
+```
+{
+    "id": "adoFeedComponent",
+    "location": {
+        "organization": "microsoft",
+        "project": "180A7408-2DEB-44D9-AE8D-992FA4C3B9A6",
+        "feed": "Product.Components.Release",
+        "name": "nullTaskComponent",
+        "version": "0.1.0"
+    }
+}
+```
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
