@@ -23,10 +23,4 @@
     <ProjectReference Include="..\Shift.Plugins.Common\Shift.Plugins.Common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>
