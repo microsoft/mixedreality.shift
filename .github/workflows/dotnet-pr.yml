@@ -5,10 +5,13 @@ on:
     - main
 jobs:
   build:
-    runs-on: windows-2022
+    runs-on: windows-latest
+
     steps:
     - name: Checking out Code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
 
     - name: Installing .NET
       uses: actions/setup-dotnet@v1
@@ -19,13 +22,53 @@ jobs:
     - name: Restoring Packages
       run: dotnet restore
 
-    - name: Building Project(s)
-      run: dotnet build --no-restore
-    
+    - name: Get version
+      id: version
+      uses: paulhatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "(MAJOR)"
+        minor_pattern: "(MINOR)"
+        bump_each_commit: false
+        format: "${major}.${minor}.${patch}"
+        tag_prefix:
+
+    - name: Generate Git Tag
+      uses: EndBug/latest-tag@latest
+      with:
+        ref: ${{ steps.version.outputs.version }}
+
     - name: Publish CLI
-      run: dotnet publish ${{ github.workspace }}/Shift.Cli/Shift.Cli.csproj -c Release -o ${{ github.workspace }}/bins/
+      run: >-
+        dotnet publish ${{ github.workspace }}/Shift.Cli/Shift.Cli.csproj 
+        -r win-x64
+        -c Release 
+        --self-contained true
+        --p:PublishSingleFile=true
+        -o ${{ github.workspace }}/bins/
 
     - name: Running Tests
       env: 
         SHIFT_PATH: ${{ github.workspace }}/bins/shift.exe
       run: dotnet test --no-build --verbosity normal
+
+    - name: Creating Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.version.outputs.version_tag }}
+        release_name: Release ${{ steps.version.outputs.version_tag }}
+        draft: false
+        prerelease: false
+                
+    - name: Publishing Release
+      id: publish-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ github.workspace }}/bins/shift.exe
+        asset_name: shift.exe
+        asset_content_type: vnd.microsoft.portable-executable
