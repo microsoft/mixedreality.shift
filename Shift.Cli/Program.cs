@@ -35,7 +35,6 @@ namespace Shift.Cli
             string programPath = ProgramDataPath.GetWorkingDirectory();
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(programPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 
             // define all plugins to build solution w/
