@@ -48,11 +48,6 @@ jobs:
         --p:PublishSingleFile=true
         -o ${{ github.workspace }}/bins/
 
-    - name: Running Tests
-      env: 
-        SHIFT_PATH: ${{ github.workspace }}/bins/shift.exe
-      run: dotnet test --no-build --verbosity normal
-
     - name: Creating Release
       id: create_release
       uses: actions/create-release@v1
