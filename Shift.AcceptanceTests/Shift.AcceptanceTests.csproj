@@ -20,6 +20,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Data\archive.zip">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Data\Contents2\readme.md">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
