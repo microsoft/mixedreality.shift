@@ -6,6 +6,8 @@
 
 using System;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Models.Common;
@@ -55,6 +57,17 @@ namespace Shift.Core.Services
             
             try
             {
+                if (IsPathToArchive(manifestPath))
+                {
+                    manifestPath = UnzipAndFindManifestFromArchivePath(manifestPath, out stagingDirectory);
+                }
+                else if (!IsPathToManifest(manifestPath))
+                {
+                    throw new ShiftException(
+                        resultCode: ShiftResultCode.ManifestNotFound, 
+                        message: "Correctly specify the path to manifest file or package archive.");
+                }
+
                 Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
 
                 if (downloadOnly)
@@ -280,6 +293,38 @@ namespace Shift.Core.Services
                     exception,
                     LogEventSerialization.FormatState);
             }
+        }
+
+        private bool IsPathToManifest(string path)
+        {
+            return path.EndsWith(".json") && File.Exists(path);
+        }
+
+        private bool IsPathToArchive(string path)
+        {
+            return path.EndsWith(".zip") && File.Exists(path);
+        }
+
+        private string UnzipAndFindManifestFromArchivePath(string path, out string stagingDirectory)
+        {
+            string outputPath = Path.Combine(new FileInfo(path).Directory.FullName, Path.GetFileNameWithoutExtension(path));
+            ZipFile.ExtractToDirectory(path, outputPath);
+
+            string[] manifestFiles = Directory.GetFiles(outputPath, "*manifest.json");
+            
+            if (manifestFiles.Length > 1)
+            {
+                throw new ShiftException(ShiftResultCode.ManifestNotFound,
+                    message: $"More than one json files found in the archive path {outputPath}");
+            }
+            else if (manifestFiles.Length == 0)
+            {
+                throw new ShiftException(ShiftResultCode.ManifestNotFound,
+                    message: $"No manifest file found in the archive path {outputPath}");
+            }
+
+            stagingDirectory = outputPath;
+            return manifestFiles[0];
         }
     }
 }

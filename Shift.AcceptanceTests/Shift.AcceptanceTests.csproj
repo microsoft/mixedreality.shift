@@ -9,6 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Data\NewFolder\**" />
+	  <EmbeddedResource Remove="Data\NewFolder\**" />
+	  <None Remove="Data\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 		<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
 		<PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
@@ -20,6 +26,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Data\archive.zip">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="Data\Contents2\readme.md">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>

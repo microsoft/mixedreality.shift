@@ -17,7 +17,7 @@
   ],
   "Components": [
     {
-      "Description": "Initial windows companion component for platform library hosting inProc",
+      "Description": "Creates a text file containing 'Hello, World.'",
       "DeviceDemands": [],
       "Id": "hello-world",
       "Location": {
