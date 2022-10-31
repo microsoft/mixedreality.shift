@@ -32,6 +32,10 @@ namespace Shift.Core.Brokers
 
         private readonly string _collectionPat;
 
+        private readonly string _collectionProject;
+
+        private readonly string _collectionUri;
+
         private readonly ILogger<AdoPackageFeedBroker> _logger;
 
         private readonly object _installArtifactToolLock = new object();
@@ -42,9 +46,15 @@ namespace Shift.Core.Brokers
         /// <param name="collectionPat">The collection personal access token.</param>
         /// <param name="collectionUri">The collection URI.</param>
         /// <param name="projectName">The collection project name.</param>
-        public AdoPackageFeedBroker(ILogger<AdoPackageFeedBroker> logger, string pat, string collectionUri, string projectName)
+        public AdoPackageFeedBroker(
+            ILogger<AdoPackageFeedBroker> logger,
+            string pat,
+            string collectionUri,
+            string projectName)
         {
             _collectionPat = pat;
+            _collectionUri = collectionUri;
+            _collectionProject = projectName;
             _collectionCredentials = new VssBasicCredential(string.Empty, _collectionPat);
             _logger = logger;
         }
@@ -64,30 +74,27 @@ namespace Shift.Core.Brokers
         public async Task DownloadPackageAsync(
             string packageName,
             string feedName,
-            string organization,
             string packageVersion,
             string downloadPath,
+            string artifactToolLocation,
             string projectName = default)
         {
-            var _artifactToolLocation = await InstallArtifactToolAsync(organization);
-
             var startInfo = new ProcessStartInfo
             {
-                FileName = Path.Combine(_artifactToolLocation, "artifacttool.exe"),
-                WorkingDirectory = _artifactToolLocation,
+                FileName = Path.Combine(artifactToolLocation, "artifacttool.exe"),
+                WorkingDirectory = artifactToolLocation,
             };
 
             // set environment variables
             startInfo.Environment.Add("pat", _collectionPat);
             Directory.CreateDirectory(downloadPath);
-            var collectionUri = ConvertOrganizationToCollectionUri(organization);
 
             // create argument list, todo: escaping strings?
             startInfo.Arguments = $"universal download " +
                 $"--feed {feedName} " +
                 $"--package-name {packageName} " +
                 $"--package-version {packageVersion} " +
-                $"--service {collectionUri} " +
+                $"--service {_collectionUri} " +
                 $"--path \"{downloadPath.Replace(@"\", @"\\")}\" " +
                 $"--patvar pat";
 
@@ -98,7 +105,7 @@ namespace Shift.Core.Brokers
 
             _logger.LogInformation($"Downloading UPack:{Environment.NewLine}" +
                 $"{{{Environment.NewLine}" +
-                $"\turl: {organization},{Environment.NewLine}" +
+                $"\turl: {_collectionUri},{Environment.NewLine}" +
                 $"\tfeed: {feedName},{Environment.NewLine}" +
                 $"\tpackage: {packageName},{Environment.NewLine}" +
                 $"\tversion: {packageVersion}{Environment.NewLine}" +
@@ -120,20 +127,16 @@ namespace Shift.Core.Brokers
         /// <returns></returns>
         public async Task<string> GetLatestPackageVersionAsync(
             string feedName,
-            string packageId,
-            string organization,
-            string project)
+            string packageId)
         {
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-
             var connection = new VssConnection(
-                baseUrl: new Uri(collectionUri),
+                baseUrl: new Uri(_collectionUri),
                 credentials: _collectionCredentials);
 
             using FeedHttpClient feedClient = connection.GetClient<FeedHttpClient>();
 
             Package packages = await feedClient.GetPackageAsync(
-                project,
+                _collectionProject,
                 feedName,
                 protocolType: "UPack",
                 packageId);
@@ -149,20 +152,16 @@ namespace Shift.Core.Brokers
         /// <returns></returns>
         public async Task<List<Models.Artifacts.PackageVersion>> GetPackageVersionsAsync(
             string feedName,
-            string packageId,
-            string organization,
-            string project)
+            string packageId)
         {
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-
             var connection = new VssConnection(
-                baseUrl: new Uri(collectionUri),
+                baseUrl: new Uri(_collectionUri),
                 credentials: _collectionCredentials);
 
             using FeedHttpClient feedClient = connection.GetClient<FeedHttpClient>();
 
             Package package = await feedClient.GetPackageAsync(
-                project,
+                _collectionProject,
                 feedName,
                 protocolType: "UPack",
                 packageId,
@@ -175,11 +174,6 @@ namespace Shift.Core.Brokers
                 Version = v.Version,
                 Views = v.Views.Select(v => v.Name).ToList(),
             }).ToList();
-        }
-
-        private static string ConvertOrganizationToCollectionUri(string organization)
-        {
-            return Uri.IsWellFormedUriString(organization, UriKind.Absolute) ? organization : $"https://dev.azure.com/{organization}/";
         }
 
         private void GetEnvironmentInfo(
@@ -227,7 +221,6 @@ namespace Shift.Core.Brokers
         }
 
         public async Task<string> InstallArtifactToolAsync(
-            string organization,
             string path = default,
             bool forceInstall = false)
         {
@@ -237,11 +230,8 @@ namespace Shift.Core.Brokers
                 out string distroName,
                 out string distroVersion);
 
-            // discover the clienttools resource area
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-
             var vssConnection = new VssConnection(
-                baseUrl: new Uri(collectionUri),
+                baseUrl: new Uri(_collectionUri),
                 credentials: _collectionCredentials);
 
             VssBlobHttpClient blobClient = vssConnection.GetClient<VssBlobHttpClient>(Guid.Parse(ResourceAreaId));

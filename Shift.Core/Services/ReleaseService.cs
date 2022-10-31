@@ -9,14 +9,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Shift.Core.Models.Common;
 using Shift.Core.Models.Events;
 using Shift.Core.Models.Manifests;
-using Shift.Core.Services.Artifacts;
 using Shift.Core.Services.Manifests;
 using Shift.Core.Services.Serialization;
 
@@ -27,27 +24,21 @@ namespace Shift.Core.Services
     /// </summary>
     public class ReleaseService : IReleaseService
     {
-        private readonly IComponentService _componentInstallationService;
-        private readonly IConfiguration _configuration;
+        private readonly IComponentService _componentService;
         private readonly ILogger<ReleaseService> _logger;
         private readonly IManifestService _manifestService;
-        private readonly IPackageFeedService _packageFeedService;
         private readonly IBundleService _bundleService;
 
         public ReleaseService(
             IComponentService componentInstallationService,
             IManifestService manifestProcessingService,
-            IPackageFeedService packageFeedService,
             IBundleService bundleService,
-            IConfiguration configuration,
             ILogger<ReleaseService> logger
-            )
+        )
         {
-            _componentInstallationService = componentInstallationService;
+            _componentService = componentInstallationService;
             _manifestService = manifestProcessingService;
-            _packageFeedService = packageFeedService;
             _bundleService = bundleService;
-            _configuration = configuration;
             _logger = logger;
         }
 
@@ -92,7 +83,7 @@ namespace Shift.Core.Services
                 var downloadTasks = new List<Task>();
                 foreach (var component in manifest.Components)
                 {
-                    downloadTasks.Add(_componentInstallationService.DownloadComponentAsync(component, downloadRoot));
+                    downloadTasks.Add(_componentService.DownloadComponentAsync(component, downloadRoot));
                 }
 
                 await Task.WhenAll(downloadTasks);

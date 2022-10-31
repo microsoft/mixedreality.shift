@@ -15,7 +15,9 @@ namespace Shift.Core.Brokers.Executable
     {
         protected readonly ILogger _logger;
 
-        public ExecutableCommandBroker(ILogger<ExecutableCommandBroker> logger, string executablePath)
+        public ExecutableCommandBroker(
+            ILogger<ExecutableCommandBroker> logger,
+            string executablePath)
         {
             ExecutablePath = executablePath;
             _logger = logger;

@@ -16,6 +16,7 @@ using Shift.Core.Services.Manifests;
 
 namespace Shift.UnitTests.ServiceTests
 {
+    [TestClass]
     internal class ReleaseServiceTests
     {
         private Mock<IComponentService> _componentService;
@@ -57,9 +58,7 @@ namespace Shift.UnitTests.ServiceTests
             var releaseService = new ReleaseService(
                 _componentService.Object,
                 _manifestService.Object,
-                _packageFeedService.Object,
                 _bundleService.Object,
-                _configuration.Object,
                 NullLogger<ReleaseService>.Instance);
 
             // act
@@ -85,14 +84,10 @@ namespace Shift.UnitTests.ServiceTests
         public async Task ReleaseService_InitReleaseAsync_CanExecuteTest()
         {
             // arrange
-            var path = "manifest.json";
-
             var releaseService = new ReleaseService(
                  _componentService.Object,
                  _manifestService.Object,
-                 _packageFeedService.Object,
                  _bundleService.Object,
-                 _configuration.Object,
                  NullLogger<ReleaseService>.Instance);
 
             // act

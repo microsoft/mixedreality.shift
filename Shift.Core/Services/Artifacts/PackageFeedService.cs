@@ -8,6 +8,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Shift.Core.Brokers;
 using Shift.Core.Models.Artifacts;
 using Shift.Core.Providers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,14 +46,20 @@ namespace Shift.Core.Services.Artifacts
             string organization)
         {
             var token = await _tokenBroker.GetTokenCredentialAsync(organization);
-            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(organization, project, token);
+
+            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(
+                organization,
+                project,
+                token);
+
+            var artifactToolLocation = await packageFeedBroker.InstallArtifactToolAsync();
 
             await packageFeedBroker.DownloadPackageAsync(
                 packageName: package,
                 feedName: feed,
-                organization: organization,
                 packageVersion: version,
                 downloadPath: downloadDir,
+                artifactToolLocation: artifactToolLocation,
                 projectName: project);
         }
 
@@ -62,7 +69,13 @@ namespace Shift.Core.Services.Artifacts
             string feedName,
             string packageName)
         {
-            var versions = await GetPackageVersionsAsListOfStringAsync(collectionUri, projectName, feedName, packageName, 1);
+            var versions = await GetPackageVersionsAsListOfStringAsync(
+                collectionUri,
+                projectName,
+                feedName,
+                packageName,
+                versionCount: 1);
+
             return versions.FirstOrDefault();
         }
 
@@ -73,7 +86,12 @@ namespace Shift.Core.Services.Artifacts
             string packageName,
             int versionCount)
         {
-            var versions = await GetPackageVersionsAsync(collectionUri, projectName, feedName, packageName);
+            var versions = await GetPackageVersionsAsync(
+                collectionUri,
+                projectName,
+                feedName,
+                packageName);
+
             return versions.Select(x => x.Version).Take(versionCount);
         }
 
@@ -85,7 +103,13 @@ namespace Shift.Core.Services.Artifacts
         {
             // this access pattern can fail, collectionUri is sometimes FQDN and at othe times an ADO name
             var token = await _tokenBroker.GetTokenCredentialAsync(collectionUri);
-            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(collectionUri, projectName, token);
+
+            var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(
+                collectionUri,
+                projectName,
+                token);
+
+            var artifactToolLocation = await packageFeedBroker.InstallArtifactToolAsync();
 
             // Check if versions exist in cache
             var key = $"{feedName}-{packageName}";
@@ -93,9 +117,7 @@ namespace Shift.Core.Services.Artifacts
             {
                 var versions = await packageFeedBroker.GetPackageVersionsAsync(
                     feedName,
-                    packageName,
-                    collectionUri,
-                    projectName);
+                    packageName);
 
                 return versions;
             });

@@ -24,9 +24,7 @@ namespace Shift.UnitTests.ServiceTests
             var broker = new Mock<IPackageFeedBroker>();
             broker.Setup(broker => broker.GetPackageVersionsAsync(
                 It.Is<string>(x => x == "testFeed"),
-                It.Is<string>(x => x == "testPackage"),
-                It.IsAny<string>(),
-                It.IsAny<string>()))
+                It.Is<string>(x => x == "testPackage")))
                 .ReturnsAsync(new System.Collections.Generic.List<PackageVersion>
                 {
                     new PackageVersion
@@ -51,8 +49,6 @@ namespace Shift.UnitTests.ServiceTests
             Assert.IsNotNull(versions2);
             Assert.AreEqual(1, versions2.Count());
             broker.Verify(broker => broker.GetPackageVersionsAsync(
-                It.IsAny<string>(),
-                It.IsAny<string>(),
                 It.IsAny<string>(),
                 It.IsAny<string>()), Times.Once);
         }

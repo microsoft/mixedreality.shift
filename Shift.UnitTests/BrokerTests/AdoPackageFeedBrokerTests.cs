@@ -10,13 +10,13 @@ using Shift.Core.Brokers;
 
 namespace Shift.UnitTests.BrokerTests
 {
-    //[TestClass]
+    [TestClass]
     public class AdoPackageFeedBrokerTests
     {
         //[TestMethod]
         public async Task AdoPackageFeedBroker_InstallArtifactToolLockingTest()
         {
-            var organization = "microsoft";
+            var organization = $"https://dev.azure.com/microsoft/";
             var pat = await new AdoTokenBroker().GetTokenCredentialAsync(organization);
             var adoPackageFeedBroker = new AdoPackageFeedBroker(
                 NullLogger<AdoPackageFeedBroker>.Instance,
