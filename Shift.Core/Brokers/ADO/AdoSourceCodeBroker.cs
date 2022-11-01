@@ -22,16 +22,20 @@ namespace Shift.Core.Brokers
     public class AdoSourceCodeBroker : ISourceCodeBroker
     {
         private readonly VssBasicCredential _collectionCredentials;
+        private readonly string _collectionUri;
         private readonly string _collectionPat;
+        private readonly string _collectionProject;
         private readonly ILogger<AdoSourceCodeBroker> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoSourceCodeBroker"/> class.
         /// </summary>
-        public AdoSourceCodeBroker(ILogger<AdoSourceCodeBroker> logger, string pat, string collectionUri, string projectNamer)
+        public AdoSourceCodeBroker(ILogger<AdoSourceCodeBroker> logger, string pat, string collectionUri, string projectName)
         {
             _collectionPat = pat;
             _collectionCredentials = new VssBasicCredential(string.Empty, _collectionPat);
+            _collectionUri = collectionUri;
+            _collectionProject = projectName;
             _logger = logger;
         }
 
@@ -44,19 +48,16 @@ namespace Shift.Core.Brokers
         /// <param name="enableAutoComplete">Set auto complete status.</param>
         /// <returns>A task.</returns>
         public async Task CreatePullRequestAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string sourceBranch,
             string targetBranch,
             bool enableAutoComplete)
         {
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-            var connection = new VssConnection(new Uri(collectionUri), _collectionCredentials);
+            var connection = new VssConnection(new Uri(_collectionUri), _collectionCredentials);
             using var gitClient = connection.GetClient<GitHttpClient>();
 
             // Get data about a specific repository
-            var repository = await gitClient.GetRepositoryAsync(projectName, repositoryName);
+            var repository = await gitClient.GetRepositoryAsync(_collectionProject, repositoryName);
 
             var pullRequest = await gitClient.CreatePullRequestAsync(
                 new GitPullRequest
@@ -90,8 +91,6 @@ namespace Shift.Core.Brokers
         /// </param>
         /// <returns>A task.</returns>
         public async Task CreatePushAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string sourceBranch,
             string branchName,
@@ -99,13 +98,11 @@ namespace Shift.Core.Brokers
             ItemChange[] changes)
         {
             // Get a GitHttpClient to talk to the Git endpoints
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-
-            var connection = new VssConnection(new Uri(collectionUri), _collectionCredentials);
+            var connection = new VssConnection(new Uri(_collectionUri), _collectionCredentials);
             using var gitClient = connection.GetClient<GitHttpClient>();
 
             // Get data about a specific repository
-            var repository = await gitClient.GetRepositoryAsync(projectName, repositoryName);
+            var repository = await gitClient.GetRepositoryAsync(_collectionProject, repositoryName);
             var refs = await gitClient.GetRefsAsync(repository.Id, filter: $"heads/{sourceBranch}");
 
             var newObjectId = (Guid.NewGuid().ToString("n") + Guid.NewGuid().ToString("n")).Substring(0, 40);
@@ -134,7 +131,10 @@ namespace Shift.Core.Brokers
                 new GitPush
                 {
                     RefUpdates = new[] { refUpdate },
-                    Commits = new[] { new GitCommitRef { Comment = comment, Changes = changeset.ToArray() } },
+                    Commits = new[] { new GitCommitRef{
+                        Comment = comment, 
+                        Changes = changeset.ToArray() 
+                    }},
                 },
                 repository.Id);
 
@@ -149,34 +149,28 @@ namespace Shift.Core.Brokers
         /// <param name="filePath">The file path, relative to the root of the repository.</param>
         /// <returns>File content expressed in bytes.</returns>
         public async Task<byte[]> DownloadFileAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string branch,
             string filePath)
         {
-            string collectionUri = ConvertOrganizationToCollectionUri(organization);
-
-            var connection = new VssConnection(new Uri(collectionUri), _collectionCredentials);
+            var connection = new VssConnection(new Uri(_collectionUri), _collectionCredentials);
             using var gitClient = connection.GetClient<GitHttpClient>();
 
-            var repository = await gitClient.GetRepositoryAsync(projectName, repositoryName);
+            var repository = await gitClient.GetRepositoryAsync(_collectionProject, repositoryName);
 
             using var outputStream = new MemoryStream();
             using var contentStream = await gitClient.GetItemContentAsync(
                 repository.Id,
                 filePath,
-                versionDescriptor: new GitVersionDescriptor { Version = $"{branch}", VersionType = GitVersionType.Branch },
+                versionDescriptor: new GitVersionDescriptor {
+                    Version = $"{branch}",
+                    VersionType = GitVersionType.Branch
+                },
                 includeContent: true);
 
             await contentStream.CopyToAsync(outputStream);
 
             return outputStream.ToArray();
-        }
-
-        private static string ConvertOrganizationToCollectionUri(string organization)
-        {
-            return Uri.IsWellFormedUriString(organization, UriKind.Absolute) ? organization : $"https://dev.azure.com/{organization}/";
         }
     }
 }

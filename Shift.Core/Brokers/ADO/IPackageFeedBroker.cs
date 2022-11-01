@@ -15,21 +15,21 @@ namespace Shift.Core.Brokers
         Task DownloadPackageAsync(
             string packageName,
             string feedName,
-            string organization,
             string packageVersion,
             string downloadPath,
+            string artifactToolLocation,
             string projectName = default);
 
         Task<string> GetLatestPackageVersionAsync(
             string feedName,
-            string packageId,
-            string organization,
-            string project);
+            string packageId);
 
         Task<List<PackageVersion>> GetPackageVersionsAsync(
             string feedName,
-            string packageId,
-            string organization,
-            string project);
+            string packageId);
+
+        Task<string> InstallArtifactToolAsync(
+            string path = default,
+            bool forceInstall = false);
     }
 }

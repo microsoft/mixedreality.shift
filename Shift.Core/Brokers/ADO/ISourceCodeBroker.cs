@@ -24,8 +24,6 @@ namespace Shift.Core.Brokers
         /// <param name="enableAutoComplete">Set auto complete status.</param>
         /// <returns>A task.</returns>
         Task CreatePullRequestAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string sourceBranch,
             string targetBranch,
@@ -44,8 +42,6 @@ namespace Shift.Core.Brokers
         /// </param>
         /// <returns>A task.</returns>
         Task CreatePushAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string sourceBranch,
             string branchName,
@@ -60,8 +56,6 @@ namespace Shift.Core.Brokers
         /// <param name="filePath">The file path, relative to the root of the repository.</param>
         /// <returns>File content expressed in bytes.</returns>
         Task<byte[]> DownloadFileAsync(
-            string organization,
-            string projectName,
             string repositoryName,
             string sourceBranch,
             string filePath);

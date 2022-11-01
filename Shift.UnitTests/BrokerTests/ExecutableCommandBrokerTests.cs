@@ -14,7 +14,7 @@ namespace Shift.UnitTests.BrokerTests
     [TestClass]
     public class ExecutableCommandBrokerTests
     {
-        // [TestMethod]
+         [TestMethod]
         public async Task ExecutableCommandBroker_CanExecuteCommand()
         {
             // arrange

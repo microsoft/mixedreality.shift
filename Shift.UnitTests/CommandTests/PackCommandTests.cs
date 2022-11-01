@@ -10,7 +10,7 @@ using MixedReality.Shift.Cli.Commands;
 using Moq;
 using Shift.Core.Services;
 
-namespace Microsoft.Internal.MR.ES.Shift.UnitTests.CommandTests
+namespace Shift.UnitTests.CommandTests
 {
     [TestClass]
     public class PackCommandTests
