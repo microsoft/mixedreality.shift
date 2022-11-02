@@ -80,13 +80,10 @@ namespace Shift.Core.Services
                 }
 
                 // Download all the components into the download root
-                var downloadTasks = new List<Task>();
                 foreach (var component in manifest.Components)
                 {
-                    downloadTasks.Add(_componentService.DownloadComponentAsync(component, downloadRoot));
+                    await _componentService.DownloadComponentAsync(component, downloadRoot);
                 }
-
-                await Task.WhenAll(downloadTasks);
 
                 // create release artifact
                 ZipFile.CreateFromDirectory(downloadRoot, archivePath);
