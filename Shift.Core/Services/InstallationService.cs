@@ -68,6 +68,9 @@ namespace Shift.Core.Services
                         message: "Correctly specify the path to manifest file or package archive.");
                 }
 
+                ProgramDataPath.UserDefinedStagingDirectory = stagingDirectory;
+                telemetryEvent.StagingDirectory = stagingDirectory;
+
                 Manifest manifest = await _manifestService.GetManifestAsync(manifestPath);
 
                 if (downloadOnly)
