@@ -61,7 +61,18 @@ namespace Shift.Core.Services.Manifests
                 else if (component.Location is FolderLocation folderLocation)
                 {
                     downloadDir = $@"{stagingDirectory}\{component.Id}";
-                    CopyDirectory(folderLocation.Path, downloadDir, true);
+
+                    if (!Directory.Exists(downloadDir))
+                    {
+                        CopyDirectory(folderLocation.Path, downloadDir, true);
+                    }
+                    else
+                    {
+                        telemetryEvent.DownloadSkipped = true;
+
+                        _logger.LogInformation($"Skipping copying of component [{component.Id}]. " +
+                            $"Already exists under {downloadDir}");
+                    }
                 }
 
                 resultCode = ShiftResultCode.Success;
