@@ -13,7 +13,7 @@
 		<LangVersion>9.0</LangVersion>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>$(AssemblyName).Sdk</PackageId>
-		<Description>Manifest analysis tool</Description>
+		<Description>Cross-platform endpoint configuration tool</Description>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
@@ -28,16 +28,20 @@
 		<PackageReference Include="Azure.Identity" Version="1.7.0" />
 		<PackageReference Include="DeepCloner" Version="0.10.4" />
 		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.*"></PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.*"></PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.*"></PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.*"></PackageReference>
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.*" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.*"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.1"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0"></PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0"></PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Services.Packaging.Client" Version="16.193.0-preview" />
 		<PackageReference Include="System.CommandLine" Version="2.0.0-beta1.21216.1" />
 		<PackageReference Include="System.CommandLine.Hosting" Version="0.3.0-alpha.21216.1" />
 		<PackageReference Include="Microsoft.TeamFoundationServer.Client" Version="16.193.0-preview" />
+		<PackageReference Include="Nerdbank.GitVersioning">
+			<Version>3.4.205</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
 	</ItemGroup>
 
 </Project>
