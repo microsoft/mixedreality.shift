@@ -45,7 +45,7 @@ jobs:
         -r win-x64
         -c Release 
         --self-contained true
-        --p:PublishSingleFile=true
+        -p:PublishSingleFile=true
         -o ${{ github.workspace }}/bins/
 
     - name: Creating Release
@@ -69,3 +69,10 @@ jobs:
         asset_path: ${{ github.workspace }}/bins/shift.exe
         asset_name: shift.exe
         asset_content_type: vnd.microsoft.portable-executable
+
+    - name: Publish SDK to Nuget
+      run: >-
+        dotnet nuget push
+        --api-key ${{ secrets.NUGET_PACKAGES_PAT }}
+        --source https://api.nuget.org/v3/index.json
+        "**/*Shift.Core*.nupkg"

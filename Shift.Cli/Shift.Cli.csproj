@@ -23,4 +23,11 @@
     <ProjectReference Include="..\Shift.Plugins.Common\Shift.Plugins.Common.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Nerdbank.GitVersioning">
+			<Version>3.4.205</Version>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+
 </Project>
