@@ -1,7 +1,7 @@
 # Introduction
 *Shift* is a cross-platform application that is capable of running arbitrary pipelines on endpoints. Shift does not require complicated server-agent architectures and can be deployed quickly to endpoints without significant infrastructure requirements. It is capable of reporting results asynchronously via cloud-based telemetry.
 
-## Running  *Shift* 
+## Running  *Shift*
 Shift runs a user-defined *manifest* on a host. A manifest file is a list of components and tasks that makes up a product. Think of components as lego pieces, and the tasks as an instruction set. Shift downloads the components from the location specified in the manifest file, and performs a set of instructions specified sequentially. Essentially, Shift Core analyzes and interprets the manifest file.
 
 `shift.exe run [path to the manifest file or standalone archive]`
