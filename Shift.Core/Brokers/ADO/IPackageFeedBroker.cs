@@ -28,6 +28,10 @@ namespace Shift.Core.Brokers
             string feedName,
             string packageId);
 
+        Task<string> GetPackageRequestUrlAsStringAsync(
+            string feedName,
+            string packageId);
+
         Task<string> InstallArtifactToolAsync(
             string path = default,
             bool forceInstall = false);

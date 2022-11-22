@@ -77,5 +77,33 @@ namespace Shift.Core.Services.Artifacts
             string projectName,
             string feedName,
             string packageName);
+
+        /// <summary>
+        /// Gets the package feed guid of an artifact
+        /// </summary>
+        /// <param name="organization">The organization of artifact location</param>
+        /// <param name="projectName">The project of artifact location</param>
+        /// <param name="feedName">The feed name artifact location</param>
+        /// <param name="packageName">The artifact package name</param>
+        /// <returns></returns>
+        Task<string> GetPackageFeedId(
+            string organization,
+            string projectName,
+            string feedName,
+            string packageName);
+
+        /// <summary>
+        /// Gets the package project guid of an artifact
+        /// </summary>
+        /// <param name="organization">The organization of artifact location</param>
+        /// <param name="projectName">The project of artifact location</param>
+        /// <param name="feedName">The feed name artifact location</param>
+        /// <param name="packageName">The artifact package name</param>
+        /// <returns></returns>
+        Task<string> GetPackageProjectId(
+            string organization,
+            string projectName,
+            string feedName,
+            string packageName);
     }
 }

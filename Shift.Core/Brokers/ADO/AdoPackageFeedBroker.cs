@@ -176,6 +176,26 @@ namespace Shift.Core.Brokers
             }).ToList();
         }
 
+        public async Task<string> GetPackageRequestUrlAsStringAsync(
+            string feedName,
+            string packageId)
+        {
+            var connection = new VssConnection(
+            baseUrl: new Uri(_collectionUri),
+            credentials: _collectionCredentials);
+
+            using FeedHttpClient feedClient = connection.GetClient<FeedHttpClient>();
+
+            Package package = await feedClient.GetPackageAsync(
+                _collectionProject,
+                feedName,
+                protocolType: "UPack",
+                packageId,
+                includeAllVersions: true);
+
+            return package.Url;
+        }
+
         private void GetEnvironmentInfo(
             out string osName,
             out string arch,
