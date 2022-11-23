@@ -4,14 +4,13 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Shift.Core.Brokers;
 using Shift.Core.Models.Artifacts;
 using Shift.Core.Providers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Shift.Core.Services.Artifacts
 {
@@ -123,6 +122,35 @@ namespace Shift.Core.Services.Artifacts
             });
 
             return versions;
+        }
+
+        public async Task<string> GetPackageFeedId(
+            string organization,
+            string projectName,
+            string feedName,
+            string packageName)
+        {
+            string pat = await _tokenBroker.GetTokenCredentialAsync(organization);
+            var broker = _packageFeedBrokerFactory.CreatePackageFeedBroker(organization, projectName, pat);
+            string url = await broker.GetPackageRequestUrlAsStringAsync(feedName, packageName);
+
+            var val = url.Split("Feeds/")[1].Split("/")[0];
+            
+            return val;
+        }
+
+        public async Task<string> GetPackageProjectId(
+            string organization,
+            string projectName,
+            string feedName,
+            string packageName)
+        {
+            string pat = await _tokenBroker.GetTokenCredentialAsync(organization);
+            var broker = _packageFeedBrokerFactory.CreatePackageFeedBroker(organization, projectName, pat);
+            string url = await broker.GetPackageRequestUrlAsStringAsync(feedName, packageName);
+
+            var val = url.Split("/")[4];
+            return val;
         }
     }
 }
