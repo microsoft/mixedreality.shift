@@ -18,6 +18,9 @@ using Shift.Core.Services.Serialization;
 
 namespace Shift.Core.Services
 {
+    /**
+     * Orchestration service for initializing devices, installing bundles, and installing components
+     */
     public class InstallationService : IInstallationService
     {
         private readonly IBundleService _bundleService;
