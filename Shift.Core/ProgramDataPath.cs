@@ -6,6 +6,8 @@
 
 using System;
 using System.IO;
+using System.Linq;
+using Shift.Core.Models.Common;
 
 namespace Shift.Core
 {
@@ -33,6 +35,27 @@ namespace Shift.Core
         public static string GetWorkingDirectory()
         {
             return AppContext.BaseDirectory;
+        }
+
+        /// <summary>
+        /// Gets the manifest path based on the staging directory
+        /// Throws Shift Exception if not found
+        /// </summary>
+        /// <returns></returns>
+        public static string GetManifestPathFromStagingDirectory()
+        {
+            string stagingDirectory = GetStagingDirectory();
+            string manifestPath = Directory.GetFiles(stagingDirectory)
+                .FirstOrDefault(d => d.Contains("manifest.json"));
+
+            if (string.IsNullOrEmpty(manifestPath))
+            {
+                throw new ShiftException(
+                    resultCode: ShiftResultCode.ManifestNotFound,
+                    message: $"No manifest.json file found under {stagingDirectory}");
+            }
+
+            return manifestPath;
         }
     }
 }
