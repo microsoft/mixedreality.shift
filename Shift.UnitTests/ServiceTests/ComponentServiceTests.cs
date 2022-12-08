@@ -60,6 +60,7 @@ namespace Shift.UnitTests.ServiceTests
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
+                    It.IsAny<string>(),
                     It.IsAny<string>()));
 
             // act
@@ -73,7 +74,8 @@ namespace Shift.UnitTests.ServiceTests
                     It.Is<string>(name => name == ((PackageLocation)component.Location).Name),
                     It.Is<string>(project => project == ((PackageLocation)component.Location).Project),
                     It.Is<string>(version => version == ((PackageLocation)component.Location).Version),
-                    It.Is<string>(organization => organization == ((PackageLocation)component.Location).Organization)
+                    It.Is<string>(organization => organization == ((PackageLocation)component.Location).Organization),
+                    It.IsAny<string>()
                 ), Times.Once());
             _packageFeedService.VerifyNoOtherCalls();
         }

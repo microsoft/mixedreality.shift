@@ -34,7 +34,8 @@ namespace Shift.Core.Services.Manifests
             string feed,
             string version = null,
             string manifestPath = null,
-            string stagingDirectory = null);
+            string stagingDirectory = null,
+            string adoPat = null);
 
         /// <summary>
         /// Gets the components in the specified bundle

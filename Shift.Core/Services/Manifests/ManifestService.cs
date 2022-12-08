@@ -54,7 +54,8 @@ namespace Shift.Core.Services.Manifests
             string feed,
             string version = null,
             string manifestPath = null,
-            string stagingDirectory = null)
+            string stagingDirectory = null,
+            string adoPat = null)
         {
             var downloadRoot = stagingDirectory ?? ProgramDataPath.GetStagingDirectory();
             manifestPath = string.IsNullOrEmpty(manifestPath) ? Path.Join(downloadRoot, $"manifest.json") : manifestPath;
@@ -72,7 +73,14 @@ namespace Shift.Core.Services.Manifests
 
             if (AdoPackageFeedBroker.IsVersionGreater(version, curVersion))
             {
-                await _packageFeedService.DownloadArtifactAsync(downloadRoot, feed, packageName, project, version, organization);
+                await _packageFeedService.DownloadArtifactAsync(
+                    downloadDir: downloadRoot,
+                    feed: feed,
+                    package: packageName,
+                    project: project,
+                    version: version,
+                    organization: organization,
+                    adoPat: adoPat);
             }
 
             var manifest = await GetManifestAsync(manifestPath);

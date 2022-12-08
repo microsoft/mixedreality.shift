@@ -21,36 +21,23 @@ namespace Shift.Core.Services.Manifests
         /// <param name="component">The component to download.</param>
         Task<ShiftResultCode> DownloadComponentAsync(
             Component component,
-            string stagingDirectory = null);
+            string stagingDirectory = null,
+            string adoPat = null);
 
         /// <summary>
-        /// Downloads specified versions of components
+        /// Downloads specified versions of components in the Manifest
         /// </summary>
         /// <param name="components">Array of components to download</param>
         /// <param name="versions">Array of versions of components</param>
-        /// <param name="packageName">The manifest package name, the product build flavor</param>
-        /// <param name="organization">The organization for the manifest</param>
-        /// <param name="project">The project for the manifest</param>
-        /// <param name="feed">The feed for the manifest</param>
+        /// <param name="manifest">Manifest object</param>
+        /// <param name="stagingDirectory">Staging directory</param>
+        /// <param name="adoPat">ADO PAT</param>
         /// <returns>Shift result code</returns>
         Task<ShiftResultCode> DownloadComponentsAsync(
             string[] components,
             string[] versions,
-            string packageName,
-            string organization,
-            string project,
-            string feed);
-
-        /// <summary>
-        /// Downloads specified versions of components from a local manifest
-        /// </summary>
-        /// <param name="components">Array of components to download</param>
-        /// <param name="versions">Array of versions of components</param>
-        /// <param name="manifestPath">Path to local manifest</param>
-        /// <returns>Shift result code</returns>
-        Task<ShiftResultCode> DownloadComponentsAsync(
-            string[] components,
-            string[] versions,
-            string manifestPath);
+            Manifest manifest,
+            string stagingDirectory = null,
+            string adoPat = null);
     }
 }

@@ -26,7 +26,7 @@ namespace Shift.UnitTests.ServiceTests
             _componentService = new Mock<IComponentService>();
             _componentService
                 .Setup(x => x.DownloadComponentAsync(It.IsAny<Component>(),
-                    It.IsAny<string>()))
+                    It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<ShiftResultCode>());
             _manifestService = new Mock<IManifestService>();
             _manifestService
@@ -63,6 +63,7 @@ namespace Shift.UnitTests.ServiceTests
                     It.Is<string>(x => x == project),
                     It.Is<string>(x => x == feed),
                     It.Is<string>(x => x == version),
+                    It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>()),
                 Times.Once());

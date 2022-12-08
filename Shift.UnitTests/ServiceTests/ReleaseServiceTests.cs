@@ -33,7 +33,9 @@ namespace Shift.UnitTests.ServiceTests
                 .ReturnsAsync(It.IsAny<string>());
             _componentService = new Mock<IComponentService>();
             _componentService
-                .Setup(x => x.DownloadComponentAsync(It.IsAny<Component>(),
+                .Setup(x => x.DownloadComponentAsync(
+                    It.IsAny<Component>(),
+                    It.IsAny<string>(),
                     It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<ShiftResultCode>());
             _manifestService = new Mock<IManifestService>();
@@ -67,9 +69,14 @@ namespace Shift.UnitTests.ServiceTests
             // assert
             Assert.Equals(ShiftResultCode.Success, result);
             _componentService
-                .Verify(x => x.DownloadComponentAsync(It.IsAny<Component>(), It.IsAny<string>()), Times.Exactly(3));
+                .Verify(x => x.DownloadComponentAsync(
+                    It.IsAny<Component>(), 
+                    It.IsAny<string>(),
+                    It.IsAny<string>()), 
+                    Times.Exactly(3));
             _packageFeedService
                 .Verify(x => x.DownloadArtifactAsync(
+                    It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),
                     It.IsAny<string>(),

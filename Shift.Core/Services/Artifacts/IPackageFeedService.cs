@@ -31,7 +31,8 @@ namespace Shift.Core.Services.Artifacts
             string package,
             string project,
             string version,
-            string organization);
+            string organization,
+            string adoPat = null);
 
         /// <summary>
         /// Gets the latest package version
