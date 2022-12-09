@@ -28,6 +28,18 @@ namespace Shift.Core.Services
             this._logger = logger;
         }
 
+        /// <summary>
+        /// Downloads the manifest and downloads its latest component given manifest feed location
+        /// </summary>
+        /// <param name="components">List of components</param>
+        /// <param name="versions">List of versions</param>
+        /// <param name="packageName">Manifest package name</param>
+        /// <param name="organization">Manifest organization name</param>
+        /// <param name="project">Manifest project name</param>
+        /// <param name="feed">Manifest feed name</param>
+        /// <param name="stagingDirectory">Staging directory</param>
+        /// <param name="adoPat">Custom ADO PAT to use for authentication</param>
+        /// <returns>Shift result code</returns>
         public async Task<ShiftResultCode> DownloadAsync(
             string[] components,
             string[] versions,
@@ -54,6 +66,15 @@ namespace Shift.Core.Services
                 adoPat: adoPat);
         }
 
+        /// <summary>
+        /// Downloads the component specified in the given manifest
+        /// </summary>
+        /// <param name="components">List of components</param>
+        /// <param name="versions">List of versions</param>
+        /// <param name="manifestPath">Path to the manifest file</param>
+        /// <param name="stagingDirectory">Staging directory</param>
+        /// <param name="adoPat">Custom ADO PAT to use for authentication</param>
+        /// <returns>Shift result code</returns>
         public async Task<ShiftResultCode> DownloadAsync(
             string[] components,
             string[] versions,
@@ -71,6 +92,17 @@ namespace Shift.Core.Services
                 adoPat: adoPat);
         }
 
+        /// <summary>
+        /// Downloads the manifest and downloads its latest bundle components given manifest feed location
+        /// </summary>
+        /// <param name="budle">Bundle ID</param>
+        /// <param name="packageName">Manifest package name</param>
+        /// <param name="organization">Manifest organization name</param>
+        /// <param name="project">Manifest project name</param>
+        /// <param name="feed">Manifest feed name</param>
+        /// <param name="stagingDirectory">Staging directory</param>
+        /// <param name="adoPat">Custom ADO PAT to use for authentication</param>
+        /// <returns>Shift result code</returns>
         public async Task<ShiftResultCode> DownloadAsync(
             string bundle,
             string packageName,
@@ -112,6 +144,15 @@ namespace Shift.Core.Services
             return resultCode;
         }
 
+
+        /// <summary>
+        /// Downloads the bundle components specified in the given manifest
+        /// </summary>
+        /// <param name="bundle">Bundle ID</param>
+        /// <param name="manifestPath">Path to the manifest file</param>
+        /// <param name="stagingDirectory">Staging directory</param>
+        /// <param name="adoPat">Custom ADO PAT to use for authentication</param>
+        /// <returns>Shift result code</returns>
         public async Task<ShiftResultCode> DownloadAsync(
             string bundle,
             string manifestPath,
