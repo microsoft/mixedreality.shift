@@ -29,7 +29,12 @@ namespace Shift.UnitTests.ServiceTests
         {
             _packageFeedService = new Mock<IPackageFeedService>();
             _packageFeedService
-                .Setup(x => x.GetLatestVersionAsStringAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.GetLatestVersionAsStringAsync(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()))
                 .ReturnsAsync(It.IsAny<string>());
             _componentService = new Mock<IComponentService>();
             _componentService
