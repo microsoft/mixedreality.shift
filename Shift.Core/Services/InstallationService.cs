@@ -60,6 +60,7 @@ namespace Shift.Core.Services
             
             try
             {
+                // If staging directory is set then do not use
                 if (IsPathToArchive(manifestPath))
                 {
                     manifestPath = UnzipAndFindManifestFromArchivePath(manifestPath, out stagingDirectory);

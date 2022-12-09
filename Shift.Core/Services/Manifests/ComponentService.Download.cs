@@ -19,7 +19,10 @@ namespace Shift.Core.Services.Manifests
 {
     public partial class ComponentService : IComponentService
     {
-        public async Task<ShiftResultCode> DownloadComponentAsync(Component component, string stagingDirectory = null)
+        public async Task<ShiftResultCode> DownloadComponentAsync(
+            Component component, 
+            string stagingDirectory = null,
+            string adoPat = null)
         {
             var telemetryEvent = new DownloadEvent();
             telemetryEvent.ComponentId = component.Id;
@@ -43,12 +46,13 @@ namespace Shift.Core.Services.Manifests
                     {
                         _logger.LogInformation($"Downloading component [{component.Id}]");
                         await _packageFeedService.DownloadArtifactAsync(
-                            downloadDir,
-                            packageLocation.Feed,
-                            packageLocation.Name,
-                            packageLocation.Project,
-                            packageLocation.Version,
-                            packageLocation.Organization);
+                            downloadDir: downloadDir,
+                            feed: packageLocation.Feed,
+                            package: packageLocation.Name,
+                            project: packageLocation.Project,
+                            version: packageLocation.Version,
+                            organization: packageLocation.Organization,
+                            adoPat: adoPat);
                     }
                     else
                     {
@@ -102,31 +106,9 @@ namespace Shift.Core.Services.Manifests
         public async Task<ShiftResultCode> DownloadComponentsAsync(
             string[] components,
             string[] versions,
-            string packageName,
-            string organization,
-            string project,
-            string feed)
-        {
-            Manifest manifest = await _manifestProcessingService.DownloadManifestAndConvertAsync(packageName, organization, project, feed);
-
-            return await DownloadComponentsAsync(components, versions, manifest);
-        }
-
-        public async Task<ShiftResultCode> DownloadComponentsAsync(
-            string[] components,
-            string[] versions,
-            string manifestPath)
-        {
-            Manifest manifest = await _manifestProcessingService.GetManifestAsync(manifestPath);
-
-            return await DownloadComponentsAsync(components, versions, manifest);
-        }
-
-        private async Task<ShiftResultCode> DownloadComponentsAsync(
-            string[] components,
-            string[] versions,
             Manifest manifest,
-            string stagingDirectory = null)
+            string stagingDirectory = null,
+            string adoPat = null)
         {
             List<Component> componentsToProcess = GetComponentFromManifestByComponentIds(manifest, components, versions);
 

@@ -42,9 +42,10 @@ namespace Shift.Core.Services.Artifacts
             string package,
             string project,
             string version,
-            string organization)
+            string organization,
+            string adoPat = null)
         {
-            var token = await _tokenBroker.GetTokenCredentialAsync(organization);
+            var token = adoPat ?? await _tokenBroker.GetTokenCredentialAsync(organization);
 
             var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(
                 organization,
