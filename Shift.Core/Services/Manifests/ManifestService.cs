@@ -62,7 +62,12 @@ namespace Shift.Core.Services.Manifests
 
             _logger.LogInformation($"Getting the latest version of {packageName}...");
 
-            version = string.IsNullOrEmpty(version) ? await _packageFeedService.GetLatestVersionAsStringAsync(organization, project, feed, packageName) : version;
+            version = string.IsNullOrEmpty(version) ? await _packageFeedService.GetLatestVersionAsStringAsync(
+                organization,
+                project,
+                feed,
+                packageName,
+                adoPat) : version;
 
             string curVersion = "0.0.0.0";
             if (File.Exists(manifestPath))

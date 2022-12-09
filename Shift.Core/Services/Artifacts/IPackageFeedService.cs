@@ -46,7 +46,8 @@ namespace Shift.Core.Services.Artifacts
             string collectionUri,
             string projectName,
             string feedName,
-            string packageName);
+            string packageName,
+            string adoPat = null);
 
         /// <summary>
         /// Get versions as a list of string for the specified package.
@@ -62,7 +63,8 @@ namespace Shift.Core.Services.Artifacts
             string projectName,
             string feedName,
             string packageName,
-            int versionCount);
+            int versionCount,
+            string adoPat = null);
 
         /// <summary>
         /// Get versions for the specified package.
@@ -77,7 +79,8 @@ namespace Shift.Core.Services.Artifacts
             string collectionUri,
             string projectName,
             string feedName,
-            string packageName);
+            string packageName,
+            string adoPat = null);
 
         /// <summary>
         /// Gets the package feed guid of an artifact

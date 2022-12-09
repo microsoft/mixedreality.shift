@@ -67,14 +67,16 @@ namespace Shift.Core.Services.Artifacts
             string collectionUri,
             string projectName,
             string feedName,
-            string packageName)
+            string packageName,
+            string adoPat=null)
         {
             var versions = await GetPackageVersionsAsListOfStringAsync(
                 collectionUri,
                 projectName,
                 feedName,
                 packageName,
-                versionCount: 1);
+                versionCount: 1,
+                adoPat: adoPat);
 
             return versions.FirstOrDefault();
         }
@@ -84,13 +86,15 @@ namespace Shift.Core.Services.Artifacts
             string projectName,
             string feedName,
             string packageName,
-            int versionCount)
+            int versionCount,
+            string adoPat=null)
         {
             var versions = await GetPackageVersionsAsync(
                 collectionUri,
                 projectName,
                 feedName,
-                packageName);
+                packageName,
+                adoPat);
 
             return versions.Select(x => x.Version).Take(versionCount);
         }
@@ -99,10 +103,11 @@ namespace Shift.Core.Services.Artifacts
             string collectionUri,
             string projectName,
             string feedName,
-            string packageName)
+            string packageName,
+            string adoPat=null)
         {
             // this access pattern can fail, collectionUri is sometimes FQDN and at othe times an ADO name
-            var token = await _tokenBroker.GetTokenCredentialAsync(collectionUri);
+            var token = adoPat ?? await _tokenBroker.GetTokenCredentialAsync(collectionUri);
 
             var packageFeedBroker = _packageFeedBrokerFactory.CreatePackageFeedBroker(
                 collectionUri,
