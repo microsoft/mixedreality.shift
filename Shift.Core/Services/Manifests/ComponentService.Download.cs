@@ -116,7 +116,7 @@ namespace Shift.Core.Services.Manifests
             {
                 _logger.LogTrace($"Downloading component [{component.Id}].");
 
-                await DownloadComponentAsync(component, stagingDirectory);
+                await DownloadComponentAsync(component, stagingDirectory, adoPat);
 
                 _logger.LogTrace($"Downloaded component [{component.Id}].");
             }
