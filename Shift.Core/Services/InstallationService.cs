@@ -65,6 +65,10 @@ namespace Shift.Core.Services
                 {
                     manifestPath = UnzipAndFindManifestFromArchivePath(manifestPath, out stagingDirectory);
                 }
+                else if (IsPathToRelease(manifestPath))
+                {
+                    manifestPath = FindManifestFromReleasePath(manifestPath, out stagingDirectory);
+                }
                 else if (!IsPathToManifest(manifestPath))
                 {
                     throw new ShiftException(
@@ -312,25 +316,35 @@ namespace Shift.Core.Services
             return path.EndsWith(".zip") && File.Exists(path);
         }
 
+        private bool IsPathToRelease(string path)
+        {
+            return Directory.Exists(path);
+        }
+
         private string UnzipAndFindManifestFromArchivePath(string path, out string stagingDirectory)
         {
             string outputPath = Path.Combine(new FileInfo(path).Directory.FullName, Path.GetFileNameWithoutExtension(path));
             ZipFile.ExtractToDirectory(path, outputPath);
 
-            string[] manifestFiles = Directory.GetFiles(outputPath, "*manifest.json");
-            
+            return FindManifestFromReleasePath(outputPath, out stagingDirectory);
+        }
+
+        private string FindManifestFromReleasePath(string path, out string stagingDirectory)
+        {
+            string[] manifestFiles = Directory.GetFiles(path, "*manifest.json");
+
             if (manifestFiles.Length > 1)
             {
                 throw new ShiftException(ShiftResultCode.ManifestNotFound,
-                    message: $"More than one json files found in the archive path {outputPath}");
+                    message: $"More than one json files found in the archive path {path}");
             }
             else if (manifestFiles.Length == 0)
             {
                 throw new ShiftException(ShiftResultCode.ManifestNotFound,
-                    message: $"No manifest file found in the archive path {outputPath}");
+                    message: $"No manifest file found in the archive path {path}");
             }
 
-            stagingDirectory = outputPath;
+            stagingDirectory = path;
             return manifestFiles[0];
         }
     }

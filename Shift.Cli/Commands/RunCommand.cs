@@ -14,11 +14,15 @@ namespace MixedReality.Shift.Cli.Commands
 {
     internal class RunCommand : Command
     {
-        public RunCommand() : base("run", "Run the tasks specified in the manifest; path can be to a packaged manifest (.zip) or manifest file (.json).")
+        public RunCommand() : base(
+            name: "run", 
+            description: "Run the tasks specified in the manifest; " +
+            "path can be to a packaged manifest (.zip) or " +
+            "manifest file (.json) or release folder containing manifest file.")
         {
             AddArgument(new Argument("path")
             {
-                Description = "The path to the local manifest or zip archive."
+                Description = "The path to the local manifest, release folder, or zip archive."
             });
 
             AddOption(new Option<string>("--bundle", "If set, runs the specified bundle tasks"));
