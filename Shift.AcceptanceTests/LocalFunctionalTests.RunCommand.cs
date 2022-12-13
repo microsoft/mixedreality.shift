@@ -110,5 +110,25 @@ namespace Shift.Cli.AcceptanceTests
             // cleanup
             Directory.Delete("./Data/archive", recursive: true);
         }
+
+        [TestMethod]
+        public async Task Shift_CanRunManifest_WithPathToReleaseHelloWorldSample()
+        {
+            // arrange
+            var process = CreateProcess($"run \"./Data/archive2\"");
+
+            // act
+            process.Start();
+            await process.WaitForExitAsync();
+            var output = await process.StandardOutput.ReadToEndAsync();
+            var error = await process.StandardError.ReadToEndAsync();
+
+            // write to output, for posterity
+            await Console.Out.WriteLineAsync(output);
+            await Console.Error.WriteLineAsync(error);
+
+            // assert
+            Assert.AreEqual(0, process.ExitCode);
+        }
     }
 }
